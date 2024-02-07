@@ -8,7 +8,7 @@ const ProductForm = () => {
   const [name, setName] = useState("");
   const [desc, setDesc] = useState("");
   const [price, setPrice] = useState("");
-  const [tags, setTags] = useState(mockTags);
+  const [tags, setTags] = useState([]);
   const [tagText, setTagText] = useState("");
   const [imageFiles, setImageFiles] = useState([]);
   const [featuredImageFile, setFeaturedImageFile] = useState([]);
@@ -32,11 +32,13 @@ const ProductForm = () => {
 
       const tagTextTruncate = e.target.value.trim();
       const newTags = [...tags, tagTextTruncate];
-      const newSet = Array.from(new Set(newTags));
+      const finialArr = newTags.filter(
+        (item, index) => newTags.indexOf(item) === index
+      );
 
-      console.log(newSet);
+      console.log(finialArr);
 
-      setTags(newSet);
+      setTags(finialArr);
       setTagText("");
     }
   };
@@ -116,20 +118,24 @@ const ProductForm = () => {
   const handleSubmitBtn = (e) => {
     e.preventDefault();
 
-    const formData = {
-      Name: name,
-      Description: desc,
-      Price: price,
-      // ProductImages: base64ImageFiles,
-      FeatureImage: featuredImageFile,
-      Tags: tags,
-    };
-    console.log(formData);
+    const formData = new FormData();
+    formData.append("Name", name);
+    formData.append("Description", desc);
+    formData.append("Price", price);
+    formData.append("FeatureImage", featuredImageFile);
+    formData.append("ProductTags", [...tags]);
+
+    console.log(formData.get("ProductTags"));
+    // const formData = {
+    //   Name: name,
+    //   Description: desc,
+    //   Price: price,
+    //   // ProductImages: base64ImageFiles,
+    //   FeatureImage: featuredImageFile,
+    //   Tags: tags,
+    // };
     addProduct(formData);
   };
-
-  // console.log(base64ImageFiles);
-  // console.log(base64FeaturedImageFile);
 
   return (
     <div className="product-form-component bg-white mt-5  rounded">

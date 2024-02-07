@@ -16,6 +16,9 @@ const ProductList = () => {
       <div onClick={handleModel}>
         <Product showModel={showModel} setShowModel={setShowModel} />
       </div>
+      <div onClick={handleModel}>
+        <Product showModel={showModel} setShowModel={setShowModel} />
+      </div>
     </div>
   );
 };

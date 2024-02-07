@@ -76,7 +76,7 @@ namespace Digital_Product_Catalogue.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] ProductCreateDTO productCreateDTO)
+        public async Task<ActionResult> Post([FromForm] ProductCreateDTO productCreateDTO)
         {
 
             var product = new Product
@@ -92,44 +92,14 @@ namespace Digital_Product_Catalogue.Controllers
 
             Product? lastEnteredProduct = await _context.Products.OrderByDescending(x => x.Id).FirstOrDefaultAsync();
 
-            //byte[] productFeatureImage = productCreateDTO.FeaturedImage;
 
 
-            //adding extra images
-            //foreach (var singleImage in productImages)
-            //{
-            //    bytes = Encoding.ASCII.GetBytes(singleImage);
-            //    var productImageItem = new ProductImage
-            //    {
-            //        IsFeatured = false,
-            //        Path = bytes,
-            //        ProductId = lastEnteredProduct.Id
 
-            //    };
+            //var productTags = productCreateDTO.ProductTags;
 
-            //    _context.ProductImages.Add(productImageItem);
+            string[] productTags = productCreateDTO.ProductTags.Split(',');
 
-            //}
-
-
-            //adding featured Image
-            //bytes = Encoding.ASCII.GetBytes(productFeatureImage[0]);
-
-            //byte[] featureImageBytes = Convert.FromBase64String(productFeatureImage);
-
-            //var productFeatureImg = new ProductImage
-            //{
-            //    IsFeatured = true,
-            //    Path = productFeatureImage,
-            //    ProductId = lastEnteredProduct.Id
-            //};
-            //_context.ProductImages.Add(productFeatureImg);
-            //await _context.SaveChangesAsync();
-
-
-            var productTags = productCreateDTO.ProductTags;
-
-            foreach (var tag in productTags)
+            foreach (string tag in productTags)
             {
                 var tagItem = new ProductTag
                 {
@@ -163,9 +133,6 @@ namespace Digital_Product_Catalogue.Controllers
             await _context.SaveChangesAsync();
             return NoContent();
         }
-
-
-
 
     }
 }
