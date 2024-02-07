@@ -4,9 +4,9 @@ import Product from "../Product/Product";
 
 const ProductList = () => {
   const [showModel, setShowModel] = useState(false);
-  // const { data: products } = useGetProductsQuery();
-  // if (!products) return;
-  // console.log(products);
+  const { data: products } = useGetProductsQuery();
+  if (!products) return;
+  console.log(products);
   const handleModel = () => {
     setShowModel(!showModel);
   };

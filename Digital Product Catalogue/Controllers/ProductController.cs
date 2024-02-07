@@ -5,6 +5,7 @@ using Digital_Product_Catalogue.DTOs;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
 using Microsoft.CodeAnalysis;
+using System.IO;
 
 
 namespace Digital_Product_Catalogue.Controllers
@@ -93,6 +94,40 @@ namespace Digital_Product_Catalogue.Controllers
             Product? lastEnteredProduct = await _context.Products.OrderByDescending(x => x.Id).FirstOrDefaultAsync();
 
 
+            if (productCreateDTO?.FeaturedImage == null || productCreateDTO.FeaturedImage.Length <= 0)
+            {
+                return BadRequest("No file was uploaded.");
+            }
+
+            // Define the folder where you want to save the uploaded files
+            //string uploadsFolder = Path.Combine(@"D:/Digital Product Catalogue Task/Digital Product Catalogue - frontend/public/Uploads", "uploads");
+            string uploadsFolder = @"D:\Digital Product Catalogue Task\Digital Product Catalogue - frontend\public\Uploads";
+
+            // Create the folder if it doesn't exist
+            if (!Directory.Exists(uploadsFolder))
+            {
+                Directory.CreateDirectory(uploadsFolder);
+            }
+
+            // Generate a unique filename for the uploaded file
+            string uniqueFileName = Path.GetRandomFileName();
+            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+            // Save the uploaded file to the specified path
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                await productCreateDTO.FeaturedImage.CopyToAsync(fileStream);
+            }
+
+            var productImage = new ProductImage
+            {
+                IsFeatured = true,
+                ProductId = lastEnteredProduct.Id,
+                Path = filePath
+            };
+
+            _context.ProductImages.Add(productImage);
+            await _context.SaveChangesAsync();
 
 
             //var productTags = productCreateDTO.ProductTags;

@@ -14,7 +14,7 @@ namespace Digital_Product_Catalogue.DTOs
 
 
         //public List<string> ProductImages { get; set; } = new List<string>();
-        //public byte[] FeaturedImage { get; set; } = null!;
+        public IFormFile FeaturedImage { get; set; } = null!;
 
         //public List<string> ProductTags { get; set; } = new List<string>();
 

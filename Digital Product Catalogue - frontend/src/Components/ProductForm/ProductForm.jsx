@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useAddProductMutation } from "../../utils/apiSlice";
-
 const ProductForm = () => {
   const mockTags = ["tag1", "tag2", "black", "new Tag"];
   const [addProduct] = useAddProductMutation();
@@ -76,12 +75,10 @@ const ProductForm = () => {
     //   }
     // };
 
-    const tempFile = URL.createObjectURL(myFile);
+    // const tempFile = URL.createObjectURL(myFile);
 
-    // const byteImage = await convertImageToByteArray(myFile);
-    // console.log(byteImage);
-    // setFeaturedImageFile(byteImage);
-    setFeaturedImageFile(tempFile);
+    console.log(myFile);
+    setFeaturedImageFile(myFile);
   };
 
   const convertImageToByteArray = (imageFile) => {
@@ -122,18 +119,10 @@ const ProductForm = () => {
     formData.append("Name", name);
     formData.append("Description", desc);
     formData.append("Price", price);
-    formData.append("FeatureImage", featuredImageFile);
+    formData.append("FeaturedImage", featuredImageFile);
     formData.append("ProductTags", [...tags]);
 
-    console.log(formData.get("ProductTags"));
-    // const formData = {
-    //   Name: name,
-    //   Description: desc,
-    //   Price: price,
-    //   // ProductImages: base64ImageFiles,
-    //   FeatureImage: featuredImageFile,
-    //   Tags: tags,
-    // };
+    console.log(formData.get("FeaturedImage"));
     addProduct(formData);
   };
 
@@ -206,7 +195,7 @@ const ProductForm = () => {
             />
             <div className="w-[20em] h-[20em] border border-gray-300  rounded">
               <img
-                src={featuredImageFile}
+                src="../../../public/Uploads/nrtxk1xy.ebh"
                 // alt="featured product image"
                 className="w-full h-full object-cover rounded"
               />

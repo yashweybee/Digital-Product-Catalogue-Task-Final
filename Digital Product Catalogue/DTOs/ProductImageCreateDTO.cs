@@ -4,7 +4,7 @@
     {
         public int ProductId { get; set; }
 
-        public byte[] Path { get; set; } = null!;
+        public string Path { get; set; } = null!;
 
         public bool IsFeatured { get; set; }
 
