@@ -77,11 +77,8 @@ const ProductForm = () => {
     const tempFile = URL.createObjectURL(myFile);
 
     // const byteImage = await convertImageToByteArray(myFile);
-
     // console.log(byteImage);
-
     // setFeaturedImageFile(byteImage);
-
     setFeaturedImageFile(tempFile);
   };
 
@@ -223,7 +220,7 @@ const ProductForm = () => {
               className="mt-2 p-1 pl-2 w-full border border-gray-400 rounded"
             />
           </label>
-          <div className="w-full h-[10em] mt-2 flex  border border-gray-300  rounded">
+          <div className="w-full mt-2 flex flex-wrap  border border-gray-300  rounded">
             {imageFiles.map((file) => (
               <img
                 key={file}
