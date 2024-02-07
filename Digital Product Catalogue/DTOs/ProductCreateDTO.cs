@@ -1,4 +1,5 @@
 ﻿using Digital_Product_Catalogue.Models;
+using System.Text;
 using System.Text.Json.Serialization;
 
 namespace Digital_Product_Catalogue.DTOs
@@ -12,8 +13,8 @@ namespace Digital_Product_Catalogue.DTOs
         public decimal Price { get; set; }
 
 
-        public List<string> ProductImages { get; set; } = new List<string>();
-        public List<string> FeaturedImage { get; set; } = new List<string>();
+        //public List<string> ProductImages { get; set; } = new List<string>();
+        //public byte[] FeaturedImage { get; set; } = null!;
         public List<string> ProductTags { get; set; } = new List<string>();
 
 

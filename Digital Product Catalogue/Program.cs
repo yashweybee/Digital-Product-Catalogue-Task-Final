@@ -15,6 +15,7 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DigitalProductCatalogueContext>();
+builder.Services.AddCors();
 
 builder.Services.AddAutoMapper(typeof(Program));
 

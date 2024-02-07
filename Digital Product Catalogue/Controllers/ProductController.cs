@@ -27,13 +27,11 @@ namespace Digital_Product_Catalogue.Controllers
         {
 
             var productGetQuery = from product in _context.Products
-                                  join productTags in _context.ProductTags on product.Id equals productTags.ProductId into productTagsGroup
-                                  join productImage in _context.ProductImages on product.Id equals productImage.Id into productImagesGroup
                                   select new
                                   {
                                       Product = product,
-                                      ProductTags = productTagsGroup.ToList(),
-                                      ProductImages = productImagesGroup.ToList(),
+                                      ProductTags = _context.ProductTags.Where(pt => pt.ProductId == product.Id).ToList(),
+                                      ProductImages = _context.ProductImages.Where(pi => pi.ProductId == product.Id).ToList(),
                                   };
 
 
@@ -94,12 +92,10 @@ namespace Digital_Product_Catalogue.Controllers
 
             Product? lastEnteredProduct = await _context.Products.OrderByDescending(x => x.Id).FirstOrDefaultAsync();
 
-            var productImages = productCreateDTO.ProductImages;
-            var productFeatureImage = productCreateDTO.FeaturedImage;
+            //byte[] productFeatureImage = productCreateDTO.FeaturedImage;
 
-            byte[] bytes;
 
-            ////adding extra images
+            //adding extra images
             //foreach (var singleImage in productImages)
             //{
             //    bytes = Encoding.ASCII.GetBytes(singleImage);
@@ -117,15 +113,18 @@ namespace Digital_Product_Catalogue.Controllers
 
 
             //adding featured Image
-            bytes = Encoding.ASCII.GetBytes(productFeatureImage[0]);
-            var productFeatureImg = new ProductImage
-            {
-                IsFeatured = true,
-                Path = bytes,
-                ProductId = lastEnteredProduct.Id
-            };
-            _context.ProductImages.Add(productFeatureImg);
-            await _context.SaveChangesAsync();
+            //bytes = Encoding.ASCII.GetBytes(productFeatureImage[0]);
+
+            //byte[] featureImageBytes = Convert.FromBase64String(productFeatureImage);
+
+            //var productFeatureImg = new ProductImage
+            //{
+            //    IsFeatured = true,
+            //    Path = productFeatureImage,
+            //    ProductId = lastEnteredProduct.Id
+            //};
+            //_context.ProductImages.Add(productFeatureImg);
+            //await _context.SaveChangesAsync();
 
 
             var productTags = productCreateDTO.ProductTags;
@@ -143,7 +142,7 @@ namespace Digital_Product_Catalogue.Controllers
 
             await _context.SaveChangesAsync();
 
-            return new CreatedAtRouteResult("GetProduct", new { product.Id }, product);
+            return Ok();
         }
 
         [HttpDelete("{Id}")]

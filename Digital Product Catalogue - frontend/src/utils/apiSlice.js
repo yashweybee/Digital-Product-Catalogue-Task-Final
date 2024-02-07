@@ -15,8 +15,9 @@ export const apiSlice = createApi({
             query: (body) => ({
                 url: '/product',
                 method: 'POST',
-                body,
+                body: body
             }),
+
             invalidatesTags: ['products']
         })
     })

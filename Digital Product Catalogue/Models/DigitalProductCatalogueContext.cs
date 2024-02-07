@@ -41,6 +41,10 @@ public partial class DigitalProductCatalogueContext : DbContext
                 .HasConstraintName("FK_ProductImages_Products");
         });
 
+        //modelBuilder.Entity<Product>()
+        //   .Property(p => p.ImageData)
+        //   .HasColumnType("VARBINARY(MAX)");
+
         modelBuilder.Entity<ProductTag>(entity =>
         {
             entity.HasOne(d => d.Product).WithMany(p => p.ProductTags)
