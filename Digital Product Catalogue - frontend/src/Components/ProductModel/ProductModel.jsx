@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { CrossSvg, HeartSvg } from "../../utils/svgs";
 import useImageFileNameGet from "../../utils/Hooks/useImageFileNameGet";
+import ImageMagnifier from "../ImageMagnifier/ImageMagnifier";
 
 const ProductModel = ({ data, handleCloseModel }) => {
   if (!data) return;
@@ -9,8 +10,6 @@ const ProductModel = ({ data, handleCloseModel }) => {
   const allImages = data.images;
   const imgObj = useImageFileNameGet(allImages);
   console.log(imgObj);
-  // console.log(fileName);
-  // if (imgFileName.length === 0) return;
 
   return (
     <div className="modal opacity-1 fixed w-full h-full top-0 left-0 flex items-center justify-center">
@@ -19,11 +18,14 @@ const ProductModel = ({ data, handleCloseModel }) => {
         {/* images section */}
         <div className="Images-section w-[80%] ">
           <div className="w-[80%] m-auto">
-            <img
+            <ImageMagnifier
+              src={"../../../Public/Uploads/" + imgObj.featuredImgName}
+            />
+            {/* <img
               src={"../../../Public/Uploads/" + imgObj.featuredImgName}
               alt="featured image"
               className="object-cover m-1 rounded-xl"
-            />
+            /> */}
           </div>
           <div className="flex w-[20%] ">
             {imgObj.otherImageName &&
