@@ -171,7 +171,7 @@ const ProductForm = () => {
             <input
               type="file"
               multiple
-              accept="image/*"
+              accept="image/*, .webp"
               onChange={handleImages}
               className="mt-2 p-1 pl-2 w-full border border-gray-400 rounded"
             />

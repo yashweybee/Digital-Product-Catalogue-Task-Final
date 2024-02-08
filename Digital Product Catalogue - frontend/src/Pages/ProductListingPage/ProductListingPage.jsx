@@ -8,8 +8,10 @@ const ProductListingPage = () => {
   return (
     <div className="">
       <Header />
-      <Filter />
-      <ProductList />
+      <div className="flex">
+        {/* <Filter /> */}
+        <ProductList />
+      </div>
     </div>
   );
 };

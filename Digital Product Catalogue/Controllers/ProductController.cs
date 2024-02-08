@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Text;
 using Microsoft.CodeAnalysis;
 using System.IO;
+using Microsoft.AspNetCore.Http;
 
 
 namespace Digital_Product_Catalogue.Controllers
@@ -97,17 +98,18 @@ namespace Digital_Product_Catalogue.Controllers
 
             //Other Images
             var allImages = productCreateDTO.ProductImages;
-            foreach (IFormFile img in allImages)
+            foreach (IFormFile imgFile in allImages)
             {
+                var filePath2 = (ObjectResult)await handleImages(productCreateDTO.FeaturedImage);
+                string fp2 = filePath2.Value.ToString();
 
-                var imgFileObj = (ObjectResult)await handleImages(img);
-                string imgFilepath = imgFileObj.Value.ToString();
 
                 var productImage = new ProductImage
                 {
+
                     IsFeatured = false,
                     ProductId = lastEnteredProduct.Id,
-                    Path = imgFilepath
+                    Path = fp2
                 };
 
                 _context.ProductImages.Add(productImage);
@@ -115,7 +117,12 @@ namespace Digital_Product_Catalogue.Controllers
 
             await _context.SaveChangesAsync();
 
+
+
+
             //Featured Image
+
+
             var filePath = (ObjectResult)await handleImages(productCreateDTO.FeaturedImage);
             string fp = filePath.Value.ToString();
 
@@ -131,6 +138,7 @@ namespace Digital_Product_Catalogue.Controllers
             await _context.SaveChangesAsync();
 
 
+            //Product-Tags
             string[] productTags = productCreateDTO.ProductTags.Split(',');
 
             foreach (string tag in productTags)
@@ -162,7 +170,6 @@ namespace Digital_Product_Catalogue.Controllers
             }
 
             // Define the folder where you want to save the uploaded files
-            //string uploadsFolder = Path.Combine(@"D:/Digital Product Catalogue Task/Digital Product Catalogue - frontend/public/Uploads", "uploads");
             string uploadsFolder = @"D:\Digital Product Catalogue Task\Digital Product Catalogue - frontend\public\Uploads";
 
             // Create the folder if it doesn't exist
@@ -172,8 +179,11 @@ namespace Digital_Product_Catalogue.Controllers
             }
 
             // Generate a unique filename for the uploaded file
+            //string uniqueFileName = Path.GetRandomFileName();
+
             string uniqueFileName = Path.GetRandomFileName();
-            string filePath = Path.GetRelativePath(uploadsFolder, uniqueFileName);
+
+            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
             // Save the uploaded file to the specified path
             using (var fileStream = new FileStream(filePath, FileMode.Create))
@@ -181,7 +191,10 @@ namespace Digital_Product_Catalogue.Controllers
                 await imgFile.CopyToAsync(fileStream);
             }
 
-
+            //using (var stream = System.IO.File.Create(filePath))
+            //{
+            //    await imgFile.CopyToAsync(stream);
+            //}
 
             return Ok(filePath);
 
@@ -189,7 +202,9 @@ namespace Digital_Product_Catalogue.Controllers
 
 
 
-        [HttpDelete("{Id}")]
+
+
+        [HttpDelete("{ Id}")]
         public async Task<ActionResult> Delete(int Id)
         {
 
