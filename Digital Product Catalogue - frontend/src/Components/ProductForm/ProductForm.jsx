@@ -11,7 +11,9 @@ const ProductForm = () => {
   const [tagText, setTagText] = useState("");
   const [imageFiles, setImageFiles] = useState([]);
   const [featuredImageFile, setFeaturedImageFile] = useState([]);
-  const [tempFeaturedFile, setTempFeaturedFile] = useState("");
+  const [tempFeaturedFile, setTempFeaturedFile] = useState(
+    "https://placehold.co/600x400?text=Featured+Image"
+  );
   const [tempImagesFiles, setTempImagesFile] = useState([]);
   const [errorMsg, setErrorMsg] = useState("");
 
