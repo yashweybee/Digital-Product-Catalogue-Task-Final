@@ -8,83 +8,65 @@ const Filter = () => {
   };
 
   return (
-    <>
-      <div
-        onClick={handleFilterPannel}
-        className="bg-gray-400 flex justify-between cursor-pointer"
-      >
-        <p>Filters</p>
-        <span>🔽</span>
+    <div className="w-full mt-5 pr-2 lg:w-2/12 lg:block">
+      <div className="p-4 mb-5 bg-white border border-gray-200 text-black">
+        <h2 className="text-2xl font-bold text-black"> Categories</h2>
+        <div className="w-16 pb-2 mb-6 border-b border-rose-600 dark:border-gray-400"></div>
+        <ul>
+          <li className="mb-4">
+            <label for="" className="flex items-center text-black  ">
+              <input type="checkbox" className="w-4 h-4 mr-2" />
+              <span className="text-lg">Biscuits</span>
+            </label>
+          </li>
+          <li className="mb-4">
+            <label for="" className="flex items-center ">
+              <input type="checkbox" className="w-4 h-4 mr-2 " />
+              <span className="text-lg">Fruits</span>
+            </label>
+          </li>
+          <li className="mb-4">
+            <label for="" className="flex items-center ">
+              <input type="checkbox" className="w-4 h-4 mr-2" />
+              <span className="text-lg">Seafood</span>
+            </label>
+          </li>
+          <li className="mb-4">
+            <label for="" className="flex items-center ">
+              <input type="checkbox" className="w-4 h-4 mr-2" />
+              <span className="text-lg">Vegetables</span>
+            </label>
+          </li>
+          <li className="mb-4">
+            <label for="" className="flex items-center ">
+              <input type="checkbox" className="w-4 h-4 mr-2" />
+              <span className="text-lg">Frozen Foods &amp; Staples</span>
+            </label>
+          </li>
+        </ul>
       </div>
-      {showPannel && (
-        <div className="transition-all">
-          <form className="product-form flex flex-col px-10 py-5">
-            <label htmlFor="name" className="my-5">
-              Name
-              <input
-                required
-                type="text"
-                placeholder="Product name"
-                name="name"
-                id="name"
-                // value={name}
-                // onChange={(e) => setName(e.target.value)}
-                className="mt-2 p-1 pl-2 w-full border border-gray-400  rounded"
-              />
-            </label>
 
-            <label htmlFor="price" className="my-5">
-              Price
-              <input
-                type="number"
-                placeholder="Product price"
-                name="product-price"
-                id="price"
-                // value={price}
-                // onChange={(e) => setPrice(e.target.value)}
-                className="mt-2 p-1 pl-2 w-full border border-gray-400  rounded"
-              />
-            </label>
-
-            <div className="my-5">
-              <label htmlFor="tags">
-                Add product tags
-                <input
-                  type="text"
-                  name="tags"
-                  id="tags"
-                  //   value={tagText}
-                  //   onChange={(e) => setTagText(e.target.value)}
-                  //   onKeyDown={handleTags}
-                  placeholder="Tag name"
-                  className="mt-2 p-1 pl-2 w-full border border-gray-400  rounded"
-                />
-                <ul className="flex flex-wrap mt-2">
-                  {/* {tags.map((tag) => (
-                <li
-                  key={tag}
-                  className="p-2 m-2 w-max  bg-gray-700 text-white rounded-xl"
-                >
-                  {tag}
-                </li>
-              ))} */}
-                </ul>
-              </label>
-            </div>
-
-            <div className="flex ">
-              <button
-                type="button"
-                // onClick={handleSubmitBtn}
-                className="m-2 bg-gray-800 p-3 text-white hover:bg-gray-700 rounded"
-              >
-                Submit
-              </button>
-            </div>
-          </form>
+      <div className="p-4 mb-5 bg-white border border-gray-200 ">
+        <h2 className="text-2xl font-bold text-black">Price</h2>
+        <div className="w-16 pb-2 mb-6 border-b border-rose-600 dark:border-gray-400"></div>
+        <div>
+          <input
+            type="range"
+            className="w-full h-1 mb-4 bg-blue-100 rounded appearance-none cursor-pointer"
+            max="100"
+            value="30"
+          />
+          <div className="flex justify-between ">
+            <span className="inline-block text-lg font-bold text-blue-800 ">
+              $1
+            </span>
+            <span className="inline-block text-lg font-bold text-blue-800 ">
+              $500
+            </span>
+          </div>
         </div>
-      )}
-    </>
+      </div>
+    </div>
   );
 };
 

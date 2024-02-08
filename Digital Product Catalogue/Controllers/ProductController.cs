@@ -100,7 +100,7 @@ namespace Digital_Product_Catalogue.Controllers
             var allImages = productCreateDTO.ProductImages;
             foreach (IFormFile imgFile in allImages)
             {
-                var filePath2 = (ObjectResult)await handleImages(productCreateDTO.FeaturedImage);
+                var filePath2 = (ObjectResult)await handleImages(imgFile);
                 string fp2 = filePath2.Value.ToString();
 
 

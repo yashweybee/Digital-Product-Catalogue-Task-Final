@@ -21,7 +21,7 @@ const ProductList = () => {
   };
 
   return (
-    <div className="flex flex-wrap justify-center bg-white">
+    <div className="flex flex-wrap justify-start ">
       {products.map((product) => (
         <Product
           handleOpenModel={handleOpenModel}

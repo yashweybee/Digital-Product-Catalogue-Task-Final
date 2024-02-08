@@ -17,6 +17,7 @@ const ImageMagnifier = ({
         position: "relative",
         height: height,
         width: width,
+        objectFit: "cover",
       }}
     >
       <img
