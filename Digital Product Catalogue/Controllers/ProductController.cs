@@ -94,9 +94,71 @@ namespace Digital_Product_Catalogue.Controllers
             Product? lastEnteredProduct = await _context.Products.OrderByDescending(x => x.Id).FirstOrDefaultAsync();
 
 
-            if (productCreateDTO?.FeaturedImage == null || productCreateDTO.FeaturedImage.Length <= 0)
+
+            //Other Images
+            var allImages = productCreateDTO.ProductImages;
+            foreach (IFormFile img in allImages)
             {
+
+                var imgFileObj = (ObjectResult)await handleImages(img);
+                string imgFilepath = imgFileObj.Value.ToString();
+
+                var productImage = new ProductImage
+                {
+                    IsFeatured = false,
+                    ProductId = lastEnteredProduct.Id,
+                    Path = imgFilepath
+                };
+
+                _context.ProductImages.Add(productImage);
+            }
+
+            await _context.SaveChangesAsync();
+
+            //Featured Image
+            var filePath = (ObjectResult)await handleImages(productCreateDTO.FeaturedImage);
+            string fp = filePath.Value.ToString();
+
+
+            var productFeaturedImg = new ProductImage
+            {
+                IsFeatured = true,
+                ProductId = lastEnteredProduct.Id,
+                Path = fp
+            };
+
+            _context.ProductImages.Add(productFeaturedImg);
+            await _context.SaveChangesAsync();
+
+
+            string[] productTags = productCreateDTO.ProductTags.Split(',');
+
+            foreach (string tag in productTags)
+            {
+                var tagItem = new ProductTag
+                {
+                    ProductId = lastEnteredProduct.Id,
+                    TagName = tag
+                };
+
+                _context.ProductTags.Add(tagItem);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
+
+
+        [HttpGet("image")]
+        public async Task<ActionResult> handleImages(IFormFile imgFile)
+        {
+
+            if (imgFile == null || imgFile.Length <= 0)
+            {
+                //return "No file was uploaded.";
                 return BadRequest("No file was uploaded.");
+
             }
 
             // Define the folder where you want to save the uploaded files
@@ -116,39 +178,16 @@ namespace Digital_Product_Catalogue.Controllers
             // Save the uploaded file to the specified path
             using (var fileStream = new FileStream(filePath, FileMode.Create))
             {
-                await productCreateDTO.FeaturedImage.CopyToAsync(fileStream);
+                await imgFile.CopyToAsync(fileStream);
             }
 
-            var productImage = new ProductImage
-            {
-                IsFeatured = true,
-                ProductId = lastEnteredProduct.Id,
-                Path = filePath
-            };
-
-            _context.ProductImages.Add(productImage);
-            await _context.SaveChangesAsync();
 
 
-            //var productTags = productCreateDTO.ProductTags;
+            return Ok(filePath);
 
-            string[] productTags = productCreateDTO.ProductTags.Split(',');
-
-            foreach (string tag in productTags)
-            {
-                var tagItem = new ProductTag
-                {
-                    ProductId = lastEnteredProduct.Id,
-                    TagName = tag
-                };
-
-                _context.ProductTags.Add(tagItem);
-            }
-
-            await _context.SaveChangesAsync();
-
-            return Ok();
         }
+
+
 
         [HttpDelete("{Id}")]
         public async Task<ActionResult> Delete(int Id)

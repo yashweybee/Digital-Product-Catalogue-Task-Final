@@ -13,17 +13,10 @@ namespace Digital_Product_Catalogue.DTOs
         public decimal Price { get; set; }
 
 
-        //public List<string> ProductImages { get; set; } = new List<string>();
+        public List<IFormFile> ProductImages { get; set; } = new List<IFormFile>();
         public IFormFile FeaturedImage { get; set; } = null!;
 
-        //public List<string> ProductTags { get; set; } = new List<string>();
-
         public string ProductTags { get; set; }
-
-
-
-        //public List<ImageDTO> ProductImages { get; set; } = new List<ImageDTO>();
-        //public List<ImageDTO> FeaturedImage { get; set; } = new List<ImageDTO>();
 
     }
 

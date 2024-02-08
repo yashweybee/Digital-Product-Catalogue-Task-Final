@@ -5,7 +5,7 @@ const ProductAddPage = () => {
   return (
     <div className="mt-10">
       <div className="Heading ">
-        <h1 className="text-2xl">Add product</h1>
+        <h1 className="text-2xl font-bold">Add product</h1>
       </div>
       <ProductForm />
     </div>

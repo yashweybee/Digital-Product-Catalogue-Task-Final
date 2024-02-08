@@ -11,6 +11,8 @@ const ProductForm = () => {
   const [tagText, setTagText] = useState("");
   const [imageFiles, setImageFiles] = useState([]);
   const [featuredImageFile, setFeaturedImageFile] = useState([]);
+  const [tempFeaturedFile, setTempFeaturedFile] = useState("");
+  const [tempImagesFiles, setTempImagesFile] = useState([]);
 
   const handleResetBtn = () => {
     setName("");
@@ -27,8 +29,6 @@ const ProductForm = () => {
     if (e.key === "Enter") {
       e.preventDefault();
 
-      const tagsArr = [];
-
       const tagTextTruncate = e.target.value.trim();
       const newTags = [...tags, tagTextTruncate];
       const finialArr = newTags.filter(
@@ -44,72 +44,19 @@ const ProductForm = () => {
 
   const handleImages = async (e) => {
     const allFiles = Array.from(e.target.files);
-    // const base64Files = await Promise.all(
-    //   allFiles.map((f) => convertToBase64(f))
-    // );
-    // setBase64ImageFiles(base64Files);
-
     const tempFiles = allFiles.map((f) => URL.createObjectURL(f));
-    console.log(tempFiles);
-    setImageFiles(tempFiles);
+    console.log(allFiles);
+    setTempImagesFile(tempFiles);
+    setImageFiles(e.target.files);
   };
 
   const handleFeaturedImage = async (e) => {
     const myFile = e.target.files[0];
-
-    // let image = e.currentTarget.files[0];
-    // console.log(image);
-    // const buffer = await image.arrayBuffer();
-    // let byteArray = new Int8Array(buffer);
-
-    // var reader = new FileReader();
-    // var fileByteArray = [];
-    // reader.readAsArrayBuffer(myFile);
-    // reader.onloadend = function (evt) {
-    //   if (evt.target.readyState == FileReader.DONE) {
-    //     var arrayBuffer = evt.target.result,
-    //       array = new Uint8Array(arrayBuffer);
-    //     for (var i = 0; i < array.length; i++) {
-    //       fileByteArray.push(array[i]);
-    //     }
-    //   }
-    // };
-
-    // const tempFile = URL.createObjectURL(myFile);
+    const tempFile = URL.createObjectURL(myFile);
+    setTempFeaturedFile(tempFile);
 
     console.log(myFile);
     setFeaturedImageFile(myFile);
-  };
-
-  const convertImageToByteArray = (imageFile) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => {
-        // Get the array buffer from the result
-        const arrayBuffer = reader.result;
-        // Convert the array buffer to byte array
-        const byteArray = new Uint8Array(arrayBuffer);
-        resolve(byteArray);
-      };
-      reader.onerror = (error) => {
-        reject(error);
-      };
-
-      // Read the image file as array buffer
-      reader.readAsArrayBuffer(imageFile);
-    });
-  };
-
-  const convertToBase64 = (myFile) => {
-    return new Promise((resolve) => {
-      const reader = new FileReader();
-
-      reader.readAsDataURL(myFile);
-
-      reader.onload = () => {
-        resolve(reader.result);
-      };
-    });
   };
 
   const handleSubmitBtn = (e) => {
@@ -119,10 +66,15 @@ const ProductForm = () => {
     formData.append("Name", name);
     formData.append("Description", desc);
     formData.append("Price", price);
+
+    for (let i = 0; i < imageFiles.length; i++) {
+      formData.append("ProductImages", imageFiles[i]);
+    }
+    // formData.append("ProductImages", imageFiles);
     formData.append("FeaturedImage", featuredImageFile);
     formData.append("ProductTags", [...tags]);
 
-    console.log(formData.get("FeaturedImage"));
+    // console.log(formData.get("ProductImages"));
     addProduct(formData);
   };
 
@@ -194,11 +146,13 @@ const ProductForm = () => {
               className="mt-2 p-1 pl-2 w-full border border-gray-400  rounded hidden"
             />
             <div className="w-[20em] h-[20em] border border-gray-300  rounded">
-              <img
-                src="../../../public/Uploads/nrtxk1xy.ebh"
-                // alt="featured product image"
-                className="w-full h-full object-cover rounded"
-              />
+              {tempFeaturedFile && (
+                <img
+                  src={tempFeaturedFile}
+                  // alt="featured product image"
+                  className="w-full h-full object-cover rounded"
+                />
+              )}
             </div>
           </label>
         </div>
@@ -216,7 +170,7 @@ const ProductForm = () => {
             />
           </label>
           <div className="w-full mt-2 flex flex-wrap  border border-gray-300  rounded">
-            {imageFiles.map((file) => (
+            {tempImagesFiles.map((file) => (
               <img
                 key={file}
                 src={file}
