@@ -173,7 +173,7 @@ namespace Digital_Product_Catalogue.Controllers
 
             // Generate a unique filename for the uploaded file
             string uniqueFileName = Path.GetRandomFileName();
-            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+            string filePath = Path.GetRelativePath(uploadsFolder, uniqueFileName);
 
             // Save the uploaded file to the specified path
             using (var fileStream = new FileStream(filePath, FileMode.Create))

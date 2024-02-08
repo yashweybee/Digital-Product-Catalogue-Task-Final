@@ -7,18 +7,22 @@ const ProductList = () => {
   const { data: products } = useGetProductsQuery();
   if (!products) return;
   console.log(products);
+
   const handleModel = () => {
     setShowModel(!showModel);
   };
 
   return (
     <div className="flex flex-wrap justify-center bg-white">
-      <div onClick={handleModel}>
-        <Product showModel={showModel} setShowModel={setShowModel} />
-      </div>
-      <div onClick={handleModel}>
-        <Product showModel={showModel} setShowModel={setShowModel} />
-      </div>
+      {products.map((product) => (
+        <div className="mt-5" key={product.id} onClick={handleModel}>
+          <Product
+            showModel={showModel}
+            setShowModel={setShowModel}
+            data={product}
+          />
+        </div>
+      ))}
     </div>
   );
 };

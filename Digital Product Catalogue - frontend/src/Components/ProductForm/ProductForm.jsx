@@ -13,6 +13,7 @@ const ProductForm = () => {
   const [featuredImageFile, setFeaturedImageFile] = useState([]);
   const [tempFeaturedFile, setTempFeaturedFile] = useState("");
   const [tempImagesFiles, setTempImagesFile] = useState([]);
+  const [errorMsg, setErrorMsg] = useState("");
 
   const handleResetBtn = () => {
     setName("");
@@ -61,6 +62,10 @@ const ProductForm = () => {
 
   const handleSubmitBtn = (e) => {
     e.preventDefault();
+    if (name.length === 0) {
+      setErrorMsg("Enter valid product name");
+      return;
+    }
 
     const formData = new FormData();
     formData.append("Name", name);
@@ -91,7 +96,9 @@ const ProductForm = () => {
             id="name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="mt-2 p-1 pl-2 w-full border border-gray-400  rounded"
+            className={`mt-2 p-1 pl-2 w-full border  rounded ${
+              errorMsg ? "border-red-500" : " border-gray-400"
+            }`}
           />
         </label>
 
@@ -192,6 +199,7 @@ const ProductForm = () => {
             className="mt-2 p-1 pl-2 w-full border border-gray-400  rounded"
           ></textarea>
         </label>
+        <span className="text-red-600">{errorMsg ? errorMsg : ""}</span>
         <div className="flex ">
           <button
             type="button"
