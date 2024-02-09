@@ -1,8 +1,15 @@
 import React, { useState } from "react";
-import { useAddProductMutation } from "../../utils/apiSlice";
+import {
+  useAddProductMutation,
+  useGetProductTagsQuery,
+} from "../../utils/apiSlice";
+import Autocomplete from "../Autocomplete/Autocomplete";
+import { CrossSearchSvg, CrossSvg } from "../../utils/svgs";
 const ProductForm = () => {
-  const mockTags = ["tag1", "tag2", "black", "new Tag"];
   const [addProduct] = useAddProductMutation();
+  const { data: productTags } = useGetProductTagsQuery();
+  // console.log(productTags);
+  // if (!productTags) return;
 
   const [name, setName] = useState("");
   const [desc, setDesc] = useState("");
@@ -16,6 +23,7 @@ const ProductForm = () => {
   );
   const [tempImagesFiles, setTempImagesFile] = useState([]);
   const [errorMsg, setErrorMsg] = useState("");
+  const [isToastOpen, setIsToastOpen] = useState(false);
 
   const handleResetBtn = () => {
     setName("");
@@ -25,24 +33,21 @@ const ProductForm = () => {
     setTagText("");
     setImageFiles([]);
     setFeaturedImageFile([]);
+    setTempFeaturedFile("https://placehold.co/600x400?text=Featured+Image");
+    setTempImagesFile([]);
   };
 
-  // console.log(tags);
-  const handleTags = (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
+  const handleTags = (e, tagValue) => {
+    e.preventDefault();
+    if (!tagValue) return;
+    const tagTextTruncate = tagValue.trim();
+    const newTags = [...tags, tagTextTruncate];
+    const finialArr = newTags.filter(
+      (item, index) => newTags.indexOf(item) === index
+    );
 
-      const tagTextTruncate = e.target.value.trim();
-      const newTags = [...tags, tagTextTruncate];
-      const finialArr = newTags.filter(
-        (item, index) => newTags.indexOf(item) === index
-      );
-
-      console.log(finialArr);
-
-      setTags(finialArr);
-      setTagText("");
-    }
+    setTags(finialArr);
+    setTagText("");
   };
 
   const handleImages = async (e) => {
@@ -62,8 +67,23 @@ const ProductForm = () => {
     setFeaturedImageFile(myFile);
   };
 
+  const handleDeleteTag = (e, tagName) => {
+    e.preventDefault();
+    // console.log(tagName);
+    const temptags = tags;
+
+    const index = temptags.indexOf(tagName);
+    if (index > -1) {
+      // only splice array when item is found
+      temptags.splice(index, 1);
+    }
+    console.log(temptags.length);
+    setTags(temptags);
+  };
+
   const handleSubmitBtn = (e) => {
     e.preventDefault();
+
     if (name.length === 0) {
       setErrorMsg("Enter valid product name");
       return;
@@ -83,10 +103,37 @@ const ProductForm = () => {
 
     // console.log(formData.get("ProductImages"));
     addProduct(formData);
+    setIsToastOpen(true);
+    handleResetBtn();
   };
 
+  const handleCloseToast = () => {
+    setIsToastOpen(false);
+  };
+
+  console.log(tags);
   return (
-    <div className="product-form-component bg-white mt-5  rounded">
+    <div className="product-form-component bg-white mt-5 rounded">
+      {isToastOpen && (
+        <div
+          class="fixed bottom-0 right-10 border-red p-4 py-6 rounded shadow-lg flex items-center justify-between mb-6  bg-green-600 text-white"
+          role="alert"
+        >
+          <span class="fa-stack fa-2x sm:mr-2 mb-3">
+            <i class="fas fa-circle text-red-dark fa-stack-2x"></i>
+            <i class="fas fa-hand-paper fa-stack-1x text-white"></i>
+          </span>
+          <div class="sm:text-left text-center sm:mb-0 mb-3 w-128">
+            <p class="font-bold text-lg">Product Added.</p>
+            {/* <p class="text-grey-dark inline-block">Product Added</p> */}
+          </div>
+          <div onClick={handleCloseToast} className="cursor-pointer">
+            <CrossSearchSvg />
+          </div>
+          {/* <i class="fas fa-times mx-4 fa-2x text-black "></i> */}
+        </div>
+      )}
+
       <form className="product-form flex flex-col px-10 py-5">
         <label htmlFor="name" className="my-5">
           Name
@@ -120,7 +167,8 @@ const ProductForm = () => {
         <div className="my-5">
           <label htmlFor="tags">
             Add product tags
-            <input
+            <Autocomplete suggestions={productTags} handleTags={handleTags} />
+            {/* <input
               type="text"
               name="tags"
               id="tags"
@@ -128,15 +176,21 @@ const ProductForm = () => {
               onChange={(e) => setTagText(e.target.value)}
               onKeyDown={handleTags}
               placeholder="Tag name"
-              className="mt-2 p-1 pl-2 w-full border border-gray-400  rounded"
-            />
+              className="mt-2 p-1 pl-2 w-full border border-gray-400  rounded" 
+            />*/}
             <ul className="flex flex-wrap mt-2">
               {tags.map((tag) => (
                 <li
                   key={tag}
-                  className="p-2 m-2 w-max  bg-gray-700 text-white rounded-xl"
+                  className="p-2 m-2 w-max  bg-gray-700 text-white rounded-xl flex items-center"
                 >
                   {tag}
+                  <button
+                    type="button w-1"
+                    onClick={(e) => handleDeleteTag(e, tag)}
+                  >
+                    <CrossSvg />
+                  </button>
                 </li>
               ))}
             </ul>

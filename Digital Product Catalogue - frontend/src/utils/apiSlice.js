@@ -11,6 +11,10 @@ export const apiSlice = createApi({
             query: () => `/product`,
             providesTags: ['products']
         }),
+        getProductTags: builder.query({
+            query: () => `/ProductTag`,
+            providesTags: ['products']
+        }),
         addProduct: builder.mutation({
             query: (body) => ({
                 url: '/product',
@@ -25,5 +29,6 @@ export const apiSlice = createApi({
 
 export const {
     useGetProductsQuery,
+    useGetProductTagsQuery,
     useAddProductMutation
 } = apiSlice;

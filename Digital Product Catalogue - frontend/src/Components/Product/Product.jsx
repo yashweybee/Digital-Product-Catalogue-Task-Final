@@ -35,7 +35,7 @@ const Product = ({ handleOpenModel, data }) => {
         className="relative m-2 mx-1 hover:scale-[98.5%] flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md cursor-pointer transition-all"
       >
         <div
-          className="relative mx-3 mt-3 h-60 overflow-hidden rounded-xl bg-gray-200"
+          className="relative mx-3 mt-3 h-60 overflow-hidden rounded bg-gray-200"
           href="#"
         >
           <img
@@ -53,14 +53,14 @@ const Product = ({ handleOpenModel, data }) => {
               {data.name}
             </h5>
           </a>
-          <div className="mt-2 mb-5 flex items-center justify-between">
+          <div className="mt-2 mb-5 flex flex-col  justify-between">
             <p>
               <span className="text-3xl font-bold text-slate-900">
                 ${data.price}
               </span>
               <span className="text-sm text-slate-900 line-through">$699</span>
             </p>
-            <div className="flex items-center">
+            {/* <div className="flex items-center">
               <svg
                 aria-hidden="true"
                 className="h-5 w-5 text-yellow-300"
@@ -109,7 +109,7 @@ const Product = ({ handleOpenModel, data }) => {
               <span className="mr-2 ml-3 rounded bg-yellow-200 px-2.5 py-0.5 text-xs font-semibold">
                 5.0
               </span>
-            </div>
+            </div> */}
           </div>
           <a
             href="#"

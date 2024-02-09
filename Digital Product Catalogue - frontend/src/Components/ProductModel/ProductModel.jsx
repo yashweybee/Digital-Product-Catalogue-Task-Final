@@ -6,65 +6,25 @@ import ImageMagnifier from "../ImageMagnifier/ImageMagnifier";
 const ProductModel = ({ data, handleCloseModel }) => {
   if (!data) return;
 
-  const [imgFileName, setImgFileName] = useState("");
+  const [featuredImage, setFeaturedImage] = useState("");
+  const [otherImages, setOtherImages] = useState([]);
   const allImages = data.images;
   const imgObj = useImageFileNameGet(allImages);
-  console.log(imgObj.otherImageName);
+  console.log(imgObj);
 
-  console.log(data);
+  const HandleMainImage = (e) => {
+    setFeaturedImage(e.target.id);
+  };
+
+  useEffect(() => {
+    setFeaturedImage(imgObj.featuredImgName);
+    setOtherImages([...imgObj.otherImageName, imgObj.featuredImgName]);
+  }, []);
 
   return (
-    // <div className="modal opacity-1 fixed w-full h-full top-0 left-0 flex items-center justify-center">
-    //   <div className="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
-    //   <div className="w-[80%] p-10 bg-white rounded-xl flex z-50  ">
-    //     {/* images section */}
-    //     <div className="Images-section w-[80%] ">
-    //       <div className="w-[80%] m-auto">
-    //         <ImageMagnifier
-    //           src={"../../../Public/Uploads/" + imgObj.featuredImgName}
-    //         />
-    //       </div>
-    //       <div className="flex w-[20%] ">
-    //         {imgObj.otherImageName &&
-    //           imgObj.otherImageName.map((img) => (
-    //             <img
-    //               key={img}
-    //               src={"../../../Public/Uploads/" + img}
-    //               alt="featured image"
-    //               className="object-cover ml-1 rounded-xl"
-    //             />
-    //           ))}
-    //       </div>
-    //     </div>
-    //     <div className="ml-10 w-10/12 ">
-    //       <h1 className="text-5xl mt-3">{data.name}</h1>
-    //       <h2 className="text-xl mt-2">{data.price}$</h2>
-    //       <p className="w-[80%] mt-2 text-gray-500">{data.description}</p>
-
-    //       <div className="flex items-center mt-10">
-    //         <button className="m-2 p-4 w-2/6 bg-gray-800 text-white  hover:bg-gray-900 cursor-pointer rounded">
-    //           But Now
-    //         </button>
-    //         <button className="m-2 p-4 w-2/6 bg-white text-black border border-gray-300 hover:bg-gray-900 hover:text-white rounded transition-all">
-    //           Add to cart
-    //         </button>
-    //         <span className="m-2 cursor-pointer">
-    //           <HeartSvg />
-    //         </span>
-    //       </div>
-    //     </div>
-    //     <div
-    //       onClick={handleCloseModel}
-    //       className="relative -top-8 -right-8 w-16 cursor-pointer"
-    //     >
-    //       <CrossSvg />
-    //     </div>
-    //   </div>
-    // </div>
-
     <div className="modal opacity-1 fixed w-full h-full top-0 left-0 flex items-center justify-center">
       <div className="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
-      <section className="relative py-12 sm:py-16 bg-white z-50 rounded">
+      <section className="relative py-12 w-10/12 sm:py-16 bg-white z-50 rounded">
         <div
           onClick={handleCloseModel}
           className=" absolute top-1 right-1 w-16 cursor-pointer inline-block"
@@ -72,38 +32,50 @@ const ProductModel = ({ data, handleCloseModel }) => {
           <CrossSvg />
         </div>
         <div className="container mx-auto px-4">
-          <div className="lg:col-gap-12 xl:col-gap-16 mt-8 grid grid-cols-1 gap-12 lg:mt-12 lg:grid-cols-5 lg:gap-16">
-            <div className="lg:col-span-3 lg:row-end-1">
+          {/* <div className="lg:col-gap-12 xl:col-gap-16 mt-8 grid grid-cols-1 gap-12 lg:mt-12 lg:grid-cols-5 lg:gap-16"> */}
+          <div className="lg:col-gap-15 xl:col-gap-16 mt-8 grid grid-cols-1 gap-12 lg:mt-12 lg:grid-cols-7 lg:gap-16">
+            {/* <div className="lg:col-span-3 lg:row-end-1"> */}
+            <div className="lg:col-span-4 lg:row-end-1">
               <div className="lg:flex lg:items-start">
                 <div className="lg:order-2 lg:ml-5">
                   <div className="max-w-xl overflow-hidden rounded-lg">
                     <ImageMagnifier
                       width={"600px"}
                       height={"600px"}
-                      src={"../../../Public/Uploads/" + imgObj.featuredImgName}
+                      src={"../../../Public/Uploads/" + featuredImage}
                     />
                   </div>
                 </div>
 
-                <div className="mt-2 w-full lg:order-1 lg:w-32 lg:flex-shrink-0">
-                  <div className="flex flex-row items-start lg:flex-col">
-                    {imgObj.otherImageName &&
-                      imgObj.otherImageName.map((img) => (
-                        <img
-                          key={img}
-                          src={"../../../Public/Uploads/" + img}
-                          alt="featured image"
-                          className="h-full w-full object-cover rounded mb-2"
-                        />
+                {/* <div className="mt-2 w-full h-64 lg:order-1 lg:w-32  lg:flex-shrink-0"> */}
+                <div className="mt-2 mr-4 w-full h-64 lg:order-1 lg:w-32  lg:flex-shrink-0">
+                  {/* <div className="flex flex-row items-start lg:flex-col"> */}
+                  <div className="">
+                    {otherImages &&
+                      otherImages.map((img) => (
+                        <div
+                          className="cursor-pointer rounded"
+                          id={img}
+                          onClick={HandleMainImage}
+                        >
+                          <img
+                            id={img}
+                            key={img}
+                            src={"../../../Public/Uploads/" + img}
+                            alt="featured image"
+                            className="h-[150px] w-[150px]   rounded mb-2"
+                          />
+                        </div>
                       ))}
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="lg:col-span-2 lg:row-span-2 lg:row-end-2">
+            {/* <div className="lg:col-span-2 lg:row-span-2 lg:row-end-2"> */}
+            <div className="lg:col-span-3 lg:row-span-2 lg:row-end-2">
               <h1 className="sm: text-2xl font-bold text-gray-900 sm:text-3xl">
-                Afro-Brazillian Coffee
+                {data.name}
               </h1>
 
               <div className="mt-5 flex items-center">
@@ -176,8 +148,8 @@ const ProductModel = ({ data, handleCloseModel }) => {
 
               <div className="mt-10 flex flex-col items-center justify-between space-y-4 border-t border-b py-4 sm:flex-row sm:space-y-0">
                 <div className="flex items-end">
-                  <h1 className="text-3xl font-bold">$60.50</h1>
-                  <span className="text-base">/month</span>
+                  <h1 className="text-3xl font-bold">${data.price}</h1>
+                  {/* <span className="text-base">/month</span> */}
                 </div>
 
                 <button
@@ -241,6 +213,32 @@ const ProductModel = ({ data, handleCloseModel }) => {
                   Cancel Anytime
                 </li>
               </ul>
+              <div className="">
+                <ul className="flex mt-5">
+                  {data.tags.map((tag) => (
+                    <li
+                      // className=" text-gray-800 border border-gray-700 m-3 p-2 rounded-xl"
+                      key={tag.id}
+                    >
+                      <span className="m-1 flex flex-wrap justify-between items-center text-xs sm:text-sm bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 rounded px-4 py-2 font-semibold leading-loose cursor-pointer text-white">
+                        {tag.tagName}
+                        {/* <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          class="w-3 h-3 sm:h-4 sm:w-4 ml-4 text-gray-500 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                            clip-rule="evenodd"
+                          />
+                        </svg> */}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
         </div>

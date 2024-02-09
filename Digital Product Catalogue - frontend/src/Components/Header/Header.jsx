@@ -14,10 +14,10 @@ const Header = () => {
       <div>
         <ul className="flex justify-between">
           <li className="mx-2">
-            <Link to="/">Home</Link>
+            <Link to="/login">Home</Link>
           </li>
           <li className="mx-2">
-            <Link to="/">Wishlist</Link>
+            <Link to="/products">Wishlist</Link>
           </li>
         </ul>
       </div>

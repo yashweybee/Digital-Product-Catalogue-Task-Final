@@ -119,9 +119,7 @@ namespace Digital_Product_Catalogue.Controllers
 
 
 
-
             //Featured Image
-
 
             var filePath = (ObjectResult)await handleImages(productCreateDTO.FeaturedImage);
             string fp = filePath.Value.ToString();
@@ -154,7 +152,7 @@ namespace Digital_Product_Catalogue.Controllers
 
             await _context.SaveChangesAsync();
 
-            return Ok();
+            return Ok("Product Added");
         }
 
 
