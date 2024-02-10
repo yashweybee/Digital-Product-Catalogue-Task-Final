@@ -21,8 +21,14 @@ export const apiSlice = createApi({
                 method: 'POST',
                 body: body
             }),
-
             invalidatesTags: ['products']
+        }),
+        deleteProduct: builder.mutation({
+            query: (productId) => ({
+                url: `/Product/${productId}`,
+                method: 'DELETE',
+                invalidatesTags: ['products']
+            })
         })
     })
 })

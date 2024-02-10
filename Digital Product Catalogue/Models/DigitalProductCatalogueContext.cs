@@ -23,6 +23,10 @@ public partial class DigitalProductCatalogueContext : DbContext
 
     public virtual DbSet<Tag> Tags { get; set; }
 
+    public virtual DbSet<User> Users { get; set; }
+
+    public virtual DbSet<WishList> WishLists { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseSqlServer("Server=DESKTOP-I8CAHS7;Database=Digital-Product-Catalogue;Trusted_Connection=True;TrustServerCertificate=True");
 
@@ -41,10 +45,6 @@ public partial class DigitalProductCatalogueContext : DbContext
                 .HasConstraintName("FK_ProductImages_Products");
         });
 
-        //modelBuilder.Entity<Product>()
-        //   .Property(p => p.ImageData)
-        //   .HasColumnType("VARBINARY(MAX)");
-
         modelBuilder.Entity<ProductTag>(entity =>
         {
             entity.HasOne(d => d.Product).WithMany(p => p.ProductTags)
@@ -56,6 +56,28 @@ public partial class DigitalProductCatalogueContext : DbContext
         modelBuilder.Entity<Tag>(entity =>
         {
             entity.Property(e => e.Name).HasColumnName("name");
+        });
+
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.HasIndex(e => e.Id, "IX_Users").IsUnique();
+        });
+
+        modelBuilder.Entity<WishList>(entity =>
+        {
+            entity.ToTable("WishList");
+
+            entity.Property(e => e.Id).ValueGeneratedNever();
+
+            entity.HasOne(d => d.Product).WithMany(p => p.WishLists)
+                .HasForeignKey(d => d.ProductId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_WishList_Products");
+
+            entity.HasOne(d => d.User).WithMany(p => p.WishLists)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_WishList_Users");
         });
 
         OnModelCreatingPartial(modelBuilder);
