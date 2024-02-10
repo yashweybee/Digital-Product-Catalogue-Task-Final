@@ -3,6 +3,8 @@ import ProductList from "../../Components/ProductList/ProductList";
 import Header from "../../Components/Header/Header";
 import Filter from "../../Components/Filter/Filter";
 import Sorting from "../../Components/Sorting/Sorting";
+import Footer from "../../Components/Footer/Footer";
+import WishList from "../../Components/WishList/WishList";
 
 const ProductListingPage = () => {
   return (
@@ -19,6 +21,8 @@ const ProductListingPage = () => {
           </div>
         </div>
       </section>
+
+      <Footer />
     </div>
   );
 };

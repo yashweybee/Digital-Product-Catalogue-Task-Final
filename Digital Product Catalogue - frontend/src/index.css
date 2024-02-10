@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-    max-width: 80%;
+    max-width: 90%;
     margin: auto;
     /* background-color: #EEEEEE; */
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;

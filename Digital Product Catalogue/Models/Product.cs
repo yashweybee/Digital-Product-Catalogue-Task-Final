@@ -18,10 +18,8 @@ public partial class Product
     [JsonIgnore]
     public virtual ICollection<ProductImage> ProductImages { get; set; } = new List<ProductImage>();
 
-
     [JsonIgnore]
     public virtual ICollection<ProductTag> ProductTags { get; set; } = new List<ProductTag>();
-
 
     [JsonIgnore]
     public virtual ICollection<WishList> WishLists { get; set; } = new List<WishList>();

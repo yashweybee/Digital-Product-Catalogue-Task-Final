@@ -7,6 +7,8 @@ import LoginPage from "./Pages/LoginPage/LoginPage.jsx";
 import ProductAddPage from "./Pages/ProductAddPage/ProductAddPage.jsx";
 import ProductListingPage from "./Pages/ProductListingPage/ProductListingPage.jsx";
 import AdminProductListingPage from "./Pages/AdminProductListing/AdminProductListingPage.jsx";
+import WishlistPage from "./Pages/WishlistPage/WishlistPage.jsx";
+import WishList from "./Components/WishList/WishList.jsx";
 
 const appRouter = createBrowserRouter([
   {
@@ -28,6 +30,11 @@ const appRouter = createBrowserRouter([
       {
         path: "/products",
         element: <ProductListingPage />,
+      },
+      {
+        path: "/wishlist",
+        element: <WishlistPage />,
+        // element: <WishList />,
       },
     ],
   },

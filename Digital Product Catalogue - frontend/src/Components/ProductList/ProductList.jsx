@@ -14,7 +14,7 @@ const ProductList = () => {
   // if (!products) return;
 
   const setTodoDataOnStateChange = () => {
-    // console.log(products);
+    console.log(products);
     // const currentProductData = products;
 
     // sortingProductData();

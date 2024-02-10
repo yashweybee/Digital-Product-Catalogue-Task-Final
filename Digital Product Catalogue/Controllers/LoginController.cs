@@ -54,7 +54,7 @@ namespace Digital_Product_Catalogue.Controllers
             if (_user != null)
             {
                 var token = GenerateTockens(_user);
-                response = Ok(new { token = token });
+                response = Ok(new { token = token, user = _user });
             }
             return response;
         }

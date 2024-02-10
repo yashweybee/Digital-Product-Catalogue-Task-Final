@@ -7,12 +7,15 @@ using System.Text;
 using Microsoft.CodeAnalysis;
 using System.IO;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace Digital_Product_Catalogue.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize]
+
     public class ProductController : ControllerBase
     {
         public DigitalProductCatalogueContext _context { get; }

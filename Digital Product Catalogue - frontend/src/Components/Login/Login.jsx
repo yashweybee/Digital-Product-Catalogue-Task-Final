@@ -1,12 +1,76 @@
-import React from "react";
+import React, { useState } from "react";
+import {
+  useLoginUserMutation,
+  useRegisterUserMutation,
+} from "../../utils/userSllice";
 
 const Login = () => {
+  const [isLoginPage, setIsLoginPage] = useState(true);
+  const [userName, setUserName] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMess, setErrorMess] = useState("");
+  const [userExists, setUserExists] = useState(true);
+
+  const [loginEndPoint] = useLoginUserMutation();
+  const registerEndPoint = useRegisterUserMutation();
+
+  const userdataValidation = (userData) => {
+    const uNmae = userData.UserName.trim();
+    const pass = userData.Password.trim();
+
+    if (uNmae.length === 0) {
+      return "Enter Valid User Name";
+    } else if (pass.length === 0) {
+      return "Enter Valid User Name";
+    } else if (uNmae.length === 0 && pass.length === 0) {
+      return "User Name and Password not valid";
+    }
+    return "";
+  };
+
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+
+    const userData = {
+      UserName: userName,
+      Password: password,
+    };
+    const errorMessage = userdataValidation(userData);
+    setErrorMess(errorMessage);
+    if (errorMessage.length > 0) return;
+
+    if (isLoginPage) {
+      loginEndPoint(userData);
+      try {
+        const { data, error } = await loginEndPoint(userData);
+        if (data) {
+          // The login was successful, and `data` contains the returned values
+
+          localStorage.setItem("token", data.token);
+          localStorage.setItem("userId", data.user.id);
+        } else if (error) {
+          console.log("Login error:", error);
+          setUserExists(false);
+        }
+      } catch (error) {
+        console.log("Unexpected error:", error);
+      }
+    } else {
+      const { data, error } = await registerEndPoint(userData);
+      console.log(data);
+    }
+  };
+
+  const handleLoginRegisterSwitch = () => {
+    setIsLoginPage(!isLoginPage);
+  };
+
   return (
     // <!-- Right Pane -->
     <div className="w-full bg-gray-100 lg:w-1/2 flex items-center justify-center">
       <div className="max-w-md w-full p-6">
         <h1 className="text-3xl font-semibold mb-6 text-black text-center">
-          Sign Up
+          {isLoginPage ? "Sign In" : "Sign Up"}
         </h1>
         {/* <h1 className="text-sm font-semibold mb-6 text-gray-500 text-center">
           Join to Our Community with all time access and free{" "}
@@ -63,11 +127,16 @@ const Login = () => {
         <div className="mt-4 text-sm text-gray-600 text-center">
           <p>or with email</p>
         </div>
-        <form action="#" method="POST" className="space-y-4">
+        <form
+          // action="#"
+          // method="POST"
+          className="space-y-4"
+          onSubmit={handleFormSubmit}
+        >
           {/* <!-- Your form elements go here --> */}
           <div>
             <label
-              for="username"
+              htmlFor="username"
               className="block text-sm font-medium text-gray-700"
             >
               Username
@@ -76,12 +145,14 @@ const Login = () => {
               type="text"
               id="username"
               name="username"
+              value={userName}
+              onChange={(e) => setUserName(e.target.value)}
               className="mt-1 p-2 w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
             />
           </div>
-          <div>
+          {/* <div>
             <label
-              for="email"
+              htmlFor="email"
               className="block text-sm font-medium text-gray-700"
             >
               Email
@@ -92,10 +163,10 @@ const Login = () => {
               name="email"
               className="mt-1 p-2 w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
             />
-          </div>
+          </div> */}
           <div>
             <label
-              for="password"
+              htmlFor="password"
               className="block text-sm font-medium text-gray-700"
             >
               Password
@@ -104,24 +175,33 @@ const Login = () => {
               type="password"
               id="password"
               name="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="mt-1 p-2 w-full border rounded-md focus:border-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-300"
             />
           </div>
           <div>
+            <span className="text-red-700">{errorMess}</span>
             <button
               type="submit"
               className="w-full bg-black text-white p-2 rounded-md hover:bg-gray-800 focus:outline-none focus:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300"
             >
-              Sign Up
+              {isLoginPage ? "Sign In" : "Sign Up"}
             </button>
           </div>
         </form>
         <div className="mt-4 text-sm text-gray-600 text-center">
           <p>
-            Already have an account?{" "}
-            <a href="#" className="text-black hover:underline">
-              Login here
-            </a>
+            {isLoginPage
+              ? "Don't have an account?"
+              : "Already have an account?"}
+
+            <span
+              onClick={handleLoginRegisterSwitch}
+              className="text-black hover:underline cursor-pointer ml-2"
+            >
+              {isLoginPage ? "Register here" : "Login here"}
+            </span>
           </p>
         </div>
       </div>

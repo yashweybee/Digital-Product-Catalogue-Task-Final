@@ -67,8 +67,6 @@ public partial class DigitalProductCatalogueContext : DbContext
         {
             entity.ToTable("WishList");
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
-
             entity.HasOne(d => d.Product).WithMany(p => p.WishLists)
                 .HasForeignKey(d => d.ProductId)
                 .OnDelete(DeleteBehavior.ClientSetNull)

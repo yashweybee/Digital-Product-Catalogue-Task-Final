@@ -30,11 +30,9 @@ const Product = ({ handleOpenModel, data }) => {
 
   return (
     <>
-      <div
-        onClick={() => handleOpenModel(data.id)}
-        className="relative m-2 mx-1 hover:scale-[98.5%] flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md cursor-pointer transition-all"
-      >
+      <div className="relative m-2 mx-1 hover:scale-[98.5%] flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md cursor-pointer transition-all">
         <div
+          onClick={() => handleOpenModel(data.id)}
           className="relative mx-3 mt-3 h-60 overflow-hidden rounded bg-gray-200"
           href="#"
         >
@@ -48,11 +46,11 @@ const Product = ({ handleOpenModel, data }) => {
           </span> */}
         </div>
         <div className="mt-4 px-5 pb-5">
-          <a href="#">
+          <div onClick={() => handleOpenModel(data.id)}>
             <h5 className="text-xl tracking-tight text-slate-900">
               {data.name}
             </h5>
-          </a>
+          </div>
           <div className="mt-2 mb-5 flex flex-col  justify-between">
             <p>
               <span className="text-3xl font-bold text-slate-900">
@@ -111,26 +109,32 @@ const Product = ({ handleOpenModel, data }) => {
               </span>
             </div> */}
           </div>
-          <a
-            href="#"
-            className="flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300"
-          >
+          <div className=" flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300">
             <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="mr-2 h-6 w-6"
-              fill="none"
+              width="24px"
+              height="24px"
               viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth="2"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-              />
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+              <g
+                id="SVGRepo_tracerCarrier"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></g>
+              <g id="SVGRepo_iconCarrier">
+                <path
+                  d="M15.7 4C18.87 4 21 6.98 21 9.76C21 15.39 12.16 20 12 20C11.84 20 3 15.39 3 9.76C3 6.98 5.13 4 8.3 4C10.12 4 11.31 4.91 12 5.71C12.69 4.91 13.88 4 15.7 4Z"
+                  stroke="#ffffff"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                ></path>
+              </g>
             </svg>
-            Add to cart
-          </a>
+            Add to wishlist
+          </div>
         </div>
       </div>
     </>
