@@ -53,7 +53,7 @@ const ProductForm = () => {
   const handleImages = async (e) => {
     const allFiles = Array.from(e.target.files);
     const tempFiles = allFiles.map((f) => URL.createObjectURL(f));
-    console.log(allFiles);
+    // console.log(allFiles);
     setTempImagesFile(tempFiles);
     setImageFiles(e.target.files);
   };
@@ -63,7 +63,7 @@ const ProductForm = () => {
     const tempFile = URL.createObjectURL(myFile);
     setTempFeaturedFile(tempFile);
 
-    console.log(myFile);
+    // console.log(myFile);
     setFeaturedImageFile(myFile);
   };
 
@@ -77,15 +77,16 @@ const ProductForm = () => {
       // only splice array when item is found
       temptags.splice(index, 1);
     }
-    console.log(temptags.length);
+    // console.log(temptags.length);
     setTags(temptags);
   };
 
-  const handleSubmitBtn = (e) => {
+  const handleSubmitBtn = async (e) => {
     e.preventDefault();
 
     if (name.length === 0) {
       setErrorMsg("Enter valid product name");
+      console.log("Enter Valis Name");
       return;
     }
 
@@ -101,36 +102,39 @@ const ProductForm = () => {
     formData.append("FeaturedImage", featuredImageFile);
     formData.append("ProductTags", [...tags]);
 
-    // console.log(formData.get("ProductImages"));
-    addProduct(formData);
+    // console.log(desc);
+
+    console.log(formData.get("ProductTags"));
+
+    // await addProduct(formData);
     setIsToastOpen(true);
-    handleResetBtn();
+    // handleResetBtn();
   };
 
   const handleCloseToast = () => {
     setIsToastOpen(false);
   };
 
-  console.log(tags);
+  // console.log(tags);
   return (
     <div className="product-form-component bg-white mt-5 rounded">
       {isToastOpen && (
         <div
-          class="fixed bottom-0 right-10 border-red p-4 py-6 rounded shadow-lg flex items-center justify-between mb-6  bg-green-600 text-white"
+          className="fixed bottom-0 right-10 border-red p-4 py-6 rounded shadow-lg flex items-center justify-between mb-6  bg-green-600 text-white"
           role="alert"
         >
-          <span class="fa-stack fa-2x sm:mr-2 mb-3">
-            <i class="fas fa-circle text-red-dark fa-stack-2x"></i>
-            <i class="fas fa-hand-paper fa-stack-1x text-white"></i>
+          <span className="fa-stack fa-2x sm:mr-2 mb-3">
+            <i className="fas fa-circle text-red-dark fa-stack-2x"></i>
+            <i className="fas fa-hand-paper fa-stack-1x text-white"></i>
           </span>
-          <div class="sm:text-left text-center sm:mb-0 mb-3 w-128">
-            <p class="font-bold text-lg">Product Added.</p>
-            {/* <p class="text-grey-dark inline-block">Product Added</p> */}
+          <div className="sm:text-left text-center sm:mb-0 mb-3 w-128">
+            <p className="font-bold text-lg">Product Added.</p>
+            {/* <p className="text-grey-dark inline-block">Product Added</p> */}
           </div>
           <div onClick={handleCloseToast} className="cursor-pointer">
             <CrossSearchSvg />
           </div>
-          {/* <i class="fas fa-times mx-4 fa-2x text-black "></i> */}
+          {/* <i className="fas fa-times mx-4 fa-2x text-black "></i> */}
         </div>
       )}
 

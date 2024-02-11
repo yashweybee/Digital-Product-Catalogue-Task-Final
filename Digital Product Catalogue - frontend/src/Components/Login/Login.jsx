@@ -36,6 +36,7 @@ const Login = () => {
       UserName: userName,
       Password: password,
     };
+
     const errorMessage = userdataValidation(userData);
     setErrorMess(errorMessage);
     if (errorMessage.length > 0) return;
@@ -48,7 +49,13 @@ const Login = () => {
           console.log(data);
           localStorage.setItem("token", data.token);
           localStorage.setItem("userId", data.user.id);
-          // navigate("/products");
+          localStorage.setItem("userName", data.user.userName);
+
+          if (userData.UserName == "Admin") {
+            navigate("/admin");
+          } else {
+            navigate("/products");
+          }
         } else if (error) {
           console.log("Login error:", error);
           // navigate("/login");

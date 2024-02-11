@@ -80,6 +80,8 @@ namespace Digital_Product_Catalogue.Controllers
 
         }
 
+
+
         [HttpPost]
         public async Task<ActionResult> Post([FromForm] ProductCreateDTO productCreateDTO)
         {
@@ -88,7 +90,7 @@ namespace Digital_Product_Catalogue.Controllers
             {
                 Name = productCreateDTO.Name,
                 Description = productCreateDTO.Description,
-                Price = productCreateDTO.Price,
+                Price = (Decimal)productCreateDTO.Price,
             };
 
             var productToAdd = _mapper.Map<Product>(product);
@@ -140,7 +142,9 @@ namespace Digital_Product_Catalogue.Controllers
 
 
             //Product-Tags
+            //string[] productTags = productCreateDTO.ProductTags;
             string[] productTags = productCreateDTO.ProductTags.Split(',');
+
 
             foreach (string tag in productTags)
             {
@@ -203,9 +207,7 @@ namespace Digital_Product_Catalogue.Controllers
 
 
 
-
-
-        [HttpDelete("{ Id}")]
+        [HttpDelete("{Id}")]
         public async Task<ActionResult> Delete(int Id)
         {
 
@@ -215,13 +217,31 @@ namespace Digital_Product_Catalogue.Controllers
             {
                 return NotFound();
             }
+
+            var wishListEntriesToDelete = _context.WishLists.Where(wl => wl.ProductId == Id);
+            _context.WishLists.RemoveRange(wishListEntriesToDelete);
+
             var productTagsData = _context.ProductTags.Where(tag => tag.ProductId == Id);
             var productImagesToDelete = _context.ProductImages.Where(pi => pi.ProductId == Id);
+
             _context.ProductImages.RemoveRange(productImagesToDelete);
             _context.ProductTags.RemoveRange(productTagsData);
             _context.Products.Remove(product);
+
             await _context.SaveChangesAsync();
             return NoContent();
+
+
+
+
+
+            //var productTagsData = _context.ProductTags.Where(tag => tag.ProductId == Id);
+            //var productImagesToDelete = _context.ProductImages.Where(pi => pi.ProductId == Id);
+            //_context.ProductImages.RemoveRange(productImagesToDelete);
+            //_context.ProductTags.RemoveRange(productTagsData);
+            //_context.Products.Remove(product);
+            //await _context.SaveChangesAsync();
+            //return NoContent();
         }
 
     }

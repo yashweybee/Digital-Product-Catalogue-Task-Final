@@ -10,6 +10,7 @@ namespace Digital_Product_Catalogue.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+
     public class LoginController : ControllerBase
     {
         public IConfiguration _config { get; }

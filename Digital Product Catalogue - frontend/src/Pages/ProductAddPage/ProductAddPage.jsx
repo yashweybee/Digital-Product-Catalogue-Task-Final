@@ -1,14 +1,28 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ProductForm from "../../Components/ProductForm/ProductForm";
+import { useNavigate } from "react-router";
+import Header from "../../Components/Header/Header";
 
 const ProductAddPage = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (localStorage.getItem("userName") !== "Admin") {
+      navigate("/products");
+    }
+  }, []);
+
   return (
-    <div className="mt-10">
-      <div className="Heading ">
-        <h1 className="text-2xl font-bold">Add product</h1>
+    <>
+      <Header />
+      <div className="mt-10">
+        <div className="Heading ">
+          <h1 className="text-2xl font-bold">Add product</h1>
+        </div>
+        <ProductForm />
       </div>
-      <ProductForm />
-    </div>
+      <footer />
+    </>
   );
 };
 

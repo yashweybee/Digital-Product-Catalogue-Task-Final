@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
   useAddWishlistItemMutation,
+  useDeleteProductMutation,
   useGetProductsQuery,
 } from "../../utils/apiSlice";
 import Product from "../Product/Product";
@@ -10,6 +11,7 @@ const ProductList = () => {
   const [clickedProduct, setClickedProduct] = useState(null);
   const { data: products, isLoading } = useGetProductsQuery();
   const [addToWishlist] = useAddWishlistItemMutation();
+  const [deleteProduct] = useDeleteProductMutation();
   const [isOpen, setIsOpen] = useState(false);
   const sortingType = useSelector((store) => store.filter.sortBy);
   const productTags = useSelector((store) => store.filter.filterTags);
@@ -22,8 +24,8 @@ const ProductList = () => {
     // const currentProductData = products;
 
     // sortingProductData();
-    filteringProductDataBasedOnTags();
     searchProductDatabasedOnSearchText();
+    // filteringProductDataBasedOnTags();
   };
 
   const searchProductDatabasedOnSearchText = () => {
@@ -67,16 +69,7 @@ const ProductList = () => {
       // sortingType === "Oldest"
       setProductsData(tempData.reverse());
     }
-
-    // console.log(productsData);
-    // filteringProductDataBasedOnTags(tempData);
   };
-
-  useEffect(() => {
-    if (!products) return;
-
-    setTodoDataOnStateChange();
-  }, [products, sortingType, productTags, searchText]);
 
   const handleCloseModel = () => {
     setIsOpen(false);
@@ -98,6 +91,21 @@ const ProductList = () => {
     addToWishlist(wishlistItem);
   };
 
+  const handelDeleteItem = (productId) => {
+    // console.log(data.id);
+    deleteProduct(productId);
+
+    const newData = productsData.filter((product) => product.id !== productId);
+
+    setProductsData(newData);
+  };
+
+  useEffect(() => {
+    if (!products) return;
+
+    setTodoDataOnStateChange();
+  }, [products, sortingType, productTags, searchText]);
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -112,6 +120,7 @@ const ProductList = () => {
         <Product
           handleOpenModel={handleOpenModel}
           handleAddtoWishlist={handleAddtoWishlist}
+          handelDeleteItem={handelDeleteItem}
           data={product}
           key={product.id}
         />

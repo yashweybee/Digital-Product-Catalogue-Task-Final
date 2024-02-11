@@ -12,7 +12,7 @@ namespace Digital_Product_Catalogue.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class WishListController : ControllerBase
     {
         public DigitalProductCatalogueContext _context { get; }

@@ -14,25 +14,30 @@ const WishList = () => {
 
   const [productsData, setProductsData] = useState([]);
 
+  const setdataOnStateChange = () => {
+    console.log(products);
+    setProductsData(products);
+  };
+
   useEffect(() => {
     if (!products) return;
-
-    setProductsData(products);
-  }, [products, productsData]);
+    setdataOnStateChange();
+  }, [products]);
 
   const handleDeleteWIshlistItem = async (productId) => {
+    console.log(productId);
     try {
       await deleteWishlistItem(productId);
       // Update state after successful deletion
-      setProductsData((prevProducts) =>
-        prevProducts.filter((p) => p.product.id !== productId)
-      );
+      const tempData = productsData.filter((p) => p.product.id !== productId);
+      // console.log(tempData);
+      setProductsData(tempData);
     } catch (error) {
       console.error("Error deleting wishlist item:", error);
     }
   };
 
-  if (!products) return;
+  if (!productsData) return;
 
   return (
     <>

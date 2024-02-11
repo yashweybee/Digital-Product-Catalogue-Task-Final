@@ -27,7 +27,8 @@ const appRouter = createBrowserRouter([
       },
       {
         path: "/admin/products",
-        element: <>{token ? <AdminProductListingPage /> : <>Please login</>}</>,
+        // element: <>{token ? <AdminProductListingPage /> : <>Please login</>}</>,
+        element: <AdminProductListingPage />,
       },
       {
         path: "/products",
@@ -36,7 +37,8 @@ const appRouter = createBrowserRouter([
       },
       {
         path: "/wishlist",
-        element: <>{token ? <WishlistPage /> : <>Please login</>}</>,
+        // element: <>{token ? <WishlistPage /> : <>Please login</>}</>,
+        element: <WishlistPage />,
       },
     ],
   },
