@@ -3,7 +3,7 @@ import { CrossSvg, HeartSvg } from "../../utils/svgs";
 import useImageFileNameGet from "../../utils/Hooks/useImageFileNameGet";
 import ImageMagnifier from "../ImageMagnifier/ImageMagnifier";
 
-const ProductModel = ({ data, handleCloseModel }) => {
+const ProductModel = ({ data, handleCloseModel, handleAddtoWishlist }) => {
   if (!data) return;
 
   const [featuredImage, setFeaturedImage] = useState("");
@@ -20,6 +20,11 @@ const ProductModel = ({ data, handleCloseModel }) => {
     setFeaturedImage(imgObj.featuredImgName);
     setOtherImages([...imgObj.otherImageName, imgObj.featuredImgName]);
   }, []);
+
+  const handleWishlistBtn = () => {
+    console.log(data.id);
+    handleAddtoWishlist(data.id);
+  };
 
   return (
     <div className="modal opacity-1 fixed w-full h-full top-0 left-0 flex items-center justify-center">
@@ -153,6 +158,7 @@ const ProductModel = ({ data, handleCloseModel }) => {
                 </div>
 
                 <button
+                  onClick={handleWishlistBtn}
                   type="button"
                   className="inline-flex items-center justify-center rounded-md border-2 border-transparent bg-gray-900 bg-none px-12 py-3 text-center text-base font-bold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-gray-800"
                 >

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import ProductModel from "../ProductModel/ProductModel";
 import { HeartSvg } from "../../utils/svgs";
 
-const Product = ({ handleOpenModel, data }) => {
+const Product = ({ handleAddtoWishlist, handleOpenModel, data }) => {
   if (!data) return;
 
   const [imgFileName, setImgFileName] = useState("");
@@ -22,11 +22,10 @@ const Product = ({ handleOpenModel, data }) => {
       setImgFileName(fileName);
     }
   }, []);
-
-  // console.log(imgFileName);
-
-  // console.log(fileName);
-  // if (imgFileName.length === 0) return;
+  const handleWishlistBtn = () => {
+    console.log(data.id);
+    handleAddtoWishlist(data.id);
+  };
 
   return (
     <>
@@ -109,7 +108,10 @@ const Product = ({ handleOpenModel, data }) => {
               </span>
             </div> */}
           </div>
-          <div className=" flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300">
+          <div
+            onClick={handleWishlistBtn}
+            className=" flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300"
+          >
             <svg
               width="24px"
               height="24px"
@@ -117,7 +119,7 @@ const Product = ({ handleOpenModel, data }) => {
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
             >
-              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+              <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
               <g
                 id="SVGRepo_tracerCarrier"
                 stroke-linecap="round"
@@ -127,7 +129,7 @@ const Product = ({ handleOpenModel, data }) => {
                 <path
                   d="M15.7 4C18.87 4 21 6.98 21 9.76C21 15.39 12.16 20 12 20C11.84 20 3 15.39 3 9.76C3 6.98 5.13 4 8.3 4C10.12 4 11.31 4.91 12 5.71C12.69 4.91 13.88 4 15.7 4Z"
                   stroke="#ffffff"
-                  stroke-width="2"
+                  strokeWidth="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
                 ></path>

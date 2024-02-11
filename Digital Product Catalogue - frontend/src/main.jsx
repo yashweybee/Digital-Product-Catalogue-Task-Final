@@ -8,12 +8,13 @@ import ProductAddPage from "./Pages/ProductAddPage/ProductAddPage.jsx";
 import ProductListingPage from "./Pages/ProductListingPage/ProductListingPage.jsx";
 import AdminProductListingPage from "./Pages/AdminProductListing/AdminProductListingPage.jsx";
 import WishlistPage from "./Pages/WishlistPage/WishlistPage.jsx";
-import WishList from "./Components/WishList/WishList.jsx";
+import AppChild from "./Components/AppChild/AppChild.jsx";
 
+const token = localStorage.getItem("token");
 const appRouter = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: <AppChild />,
     children: [
       {
         path: "/login",
@@ -21,20 +22,21 @@ const appRouter = createBrowserRouter([
       },
       {
         path: "/admin",
+        // element: <>{token ? <ProductAddPage /> : <>Please login</>}</>,
         element: <ProductAddPage />,
       },
       {
         path: "/admin/products",
-        element: <AdminProductListingPage />,
+        element: <>{token ? <AdminProductListingPage /> : <>Please login</>}</>,
       },
       {
         path: "/products",
+        // element: <>{token ? <ProductListingPage /> : <>Please login</>}</>,
         element: <ProductListingPage />,
       },
       {
         path: "/wishlist",
-        element: <WishlistPage />,
-        // element: <WishList />,
+        element: <>{token ? <WishlistPage /> : <>Please login</>}</>,
       },
     ],
   },

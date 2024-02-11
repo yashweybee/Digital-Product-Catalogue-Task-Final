@@ -3,13 +3,14 @@ import {
   useLoginUserMutation,
   useRegisterUserMutation,
 } from "../../utils/userSllice";
+import { useNavigate } from "react-router";
 
 const Login = () => {
   const [isLoginPage, setIsLoginPage] = useState(true);
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [errorMess, setErrorMess] = useState("");
-  const [userExists, setUserExists] = useState(true);
+  const navigate = useNavigate();
 
   const [loginEndPoint] = useLoginUserMutation();
   const registerEndPoint = useRegisterUserMutation();
@@ -44,13 +45,13 @@ const Login = () => {
       try {
         const { data, error } = await loginEndPoint(userData);
         if (data) {
-          // The login was successful, and `data` contains the returned values
-
+          console.log(data);
           localStorage.setItem("token", data.token);
           localStorage.setItem("userId", data.user.id);
+          // navigate("/products");
         } else if (error) {
           console.log("Login error:", error);
-          setUserExists(false);
+          // navigate("/login");
         }
       } catch (error) {
         console.log("Unexpected error:", error);
@@ -183,6 +184,7 @@ const Login = () => {
           <div>
             <span className="text-red-700">{errorMess}</span>
             <button
+              // onClick={handleSub}
               type="submit"
               className="w-full bg-black text-white p-2 rounded-md hover:bg-gray-800 focus:outline-none focus:bg-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900 transition-colors duration-300"
             >

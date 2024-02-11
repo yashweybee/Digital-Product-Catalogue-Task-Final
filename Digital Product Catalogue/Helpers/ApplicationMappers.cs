@@ -19,6 +19,9 @@ namespace Digital_Product_Catalogue.Helpers
             CreateMap<ProductTag, ProductTagDTO>().ReverseMap();
             CreateMap<ProductTagCreateDTO, ProductTag>();
 
+            CreateMap<WishList, WishlistDTO>().ReverseMap();
+            CreateMap<WishlistCreateDTO, WishList>();
+
         }
     }
 }

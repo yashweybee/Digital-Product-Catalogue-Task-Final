@@ -4,13 +4,15 @@ using Digital_Product_Catalogue.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
+using System.IO;
 
 namespace Digital_Product_Catalogue.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class WishListController : ControllerBase
     {
         public DigitalProductCatalogueContext _context { get; }
@@ -35,41 +37,36 @@ namespace Digital_Product_Catalogue.Controllers
                                       ProductImages = _context.ProductImages.Where(pi => pi.ProductId == product.Id).ToList(),
                                   };
 
-            //var products2 = await productGetQuery.ToListAsync();
-
-            //var mappedProducts = products2.Select(pr => new
-            //{
-            //    id = pr.Product.Id,
-            //    name = pr.Product.Name,
-            //    description = pr.Product.Description,
-            //    price = pr.Product.Price,
-            //    tags = _mapper.Map<List<ProductTagDTO>>(pr.ProductTags),
-            //    images = _mapper.Map<List<ProductImageDTO>>(pr.ProductImages),
-            //}).ToList();
 
             return Ok(productGetQuery);
         }
 
+        [HttpPost]
+        public async Task<ActionResult> Post([FromBody] WishlistCreateDTO wishlistCreateDTO)
+        {
+            var wishlistItem = _mapper.Map<WishList>(wishlistCreateDTO);
+            _context.Add(wishlistItem);
+            await _context.SaveChangesAsync();
+            //var partyDTO = _mapper.Map<WishlistDTO>(wishlistItem);
+            return Ok("Wishlist Added");
+        }
 
-        //[HttpDelete("{ Id}")]
-        //public async Task<ActionResult> Delete(int Id)
-        //{
 
-        //    var product = await _context.WishLists.FindAsync(p => );
+        [HttpDelete("{userId}/{productId}")]
+        public async Task<ActionResult> Delete(int userId, int productId)
+        {
+            var wishlistItemToDelete = _context.WishLists.FirstOrDefault(w => w.ProductId == productId && w.UserId == userId);
 
-        //    if (product == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    var productTagsData = _context.ProductTags.Where(tag => tag.ProductId == Id);
-        //    var productImagesToDelete = _context.ProductImages.Where(pi => pi.ProductId == Id);
-        //    _context.ProductImages.RemoveRange(productImagesToDelete);
-        //    _context.ProductTags.RemoveRange(productTagsData);
-        //    _context.Products.Remove(product);
-        //    await _context.SaveChangesAsync();
-        //    return NoContent();
-        //}
+            if (wishlistItemToDelete == null)
+            {
+                return NotFound();
+            }
 
+            _context.WishLists.Remove(wishlistItemToDelete);
+            _context.SaveChanges();
+
+            return NoContent();
+        }
 
     }
 }

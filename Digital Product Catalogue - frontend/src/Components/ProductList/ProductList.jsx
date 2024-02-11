@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { useGetProductsQuery } from "../../utils/apiSlice";
+import {
+  useAddWishlistItemMutation,
+  useGetProductsQuery,
+} from "../../utils/apiSlice";
 import Product from "../Product/Product";
 import ProductModel from "../ProductModel/ProductModel";
 import { useSelector } from "react-redux";
 const ProductList = () => {
   const [clickedProduct, setClickedProduct] = useState(null);
   const { data: products, isLoading } = useGetProductsQuery();
+  const [addToWishlist] = useAddWishlistItemMutation();
   const [isOpen, setIsOpen] = useState(false);
   const sortingType = useSelector((store) => store.filter.sortBy);
   const productTags = useSelector((store) => store.filter.filterTags);
@@ -26,7 +30,7 @@ const ProductList = () => {
     if (searchText.length === 0) {
       setProductsData(products);
     } else {
-      const searchProducts = productsData.filter((product) =>
+      const searchProducts = products.filter((product) =>
         product.name.toLowerCase().includes(searchText.toLowerCase())
       );
       setProductsData(searchProducts);
@@ -85,25 +89,29 @@ const ProductList = () => {
     setClickedProduct(modelData);
   };
 
-  // if (productsData.length === 0) return;
+  const handleAddtoWishlist = (productId) => {
+    const wishlistItem = {
+      userId: localStorage.getItem("userId"),
+      productId: productId,
+    };
+    // console.log(localStorage.getItem("userId"));
+    addToWishlist(wishlistItem);
+  };
 
   if (isLoading) {
-    // Loading state
     return <div>Loading...</div>;
   }
 
   if (!productsData.length) {
-    // No products
     return <div>No products available.</div>;
   }
 
-  // console.log(productsData);
   return (
-    // <> </>
     <div className="flex flex-wrap justify-start ">
       {productsData.map((product) => (
         <Product
           handleOpenModel={handleOpenModel}
+          handleAddtoWishlist={handleAddtoWishlist}
           data={product}
           key={product.id}
         />
@@ -111,6 +119,7 @@ const ProductList = () => {
 
       {clickedProduct && (
         <ProductModel
+          handleAddtoWishlist={handleAddtoWishlist}
           data={clickedProduct}
           handleCloseModel={handleCloseModel}
         />
