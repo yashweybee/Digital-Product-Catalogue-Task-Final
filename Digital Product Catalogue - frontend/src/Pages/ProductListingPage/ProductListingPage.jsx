@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ProductList from "../../Components/ProductList/ProductList";
 import Header from "../../Components/Header/Header";
 import Filter from "../../Components/Filter/Filter";
@@ -7,15 +7,22 @@ import Footer from "../../Components/Footer/Footer";
 import WishList from "../../Components/WishList/WishList";
 
 const ProductListingPage = () => {
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    if (localStorage.getItem("userName") === "Admin") {
+      setIsAdmin(true);
+    }
+  }, []);
   return (
     <div>
       <Header />
       <section className="">
         <div className="mt-5">
           <div className="flex flex-wrap mb-24 ">
-            <Filter />
+            {!isAdmin && <Filter />}
             <div className="w-full px-3 lg:w-3/4 overflow-y-auto flex-1">
-              <Sorting />
+              {!isAdmin && <Sorting />}
               <ProductList />
             </div>
           </div>

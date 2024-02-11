@@ -13,7 +13,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   const [loginEndPoint] = useLoginUserMutation();
-  const registerEndPoint = useRegisterUserMutation();
+  const [registerEndPoint] = useRegisterUserMutation();
 
   const userdataValidation = (userData) => {
     const uNmae = userData.UserName.trim();
@@ -64,8 +64,18 @@ const Login = () => {
         console.log("Unexpected error:", error);
       }
     } else {
-      const { data, error } = await registerEndPoint(userData);
-      console.log(data);
+      try {
+        const { data, error } = await registerEndPoint(userData);
+        // const { data, error } = await loginEndPoint(userData);
+        if (data) {
+        } else if (error) {
+          console.log("Regs. error:", error);
+          console.log(error);
+          setErrorMess("User already exists");
+        }
+      } catch (error) {
+        console.log("Unexpected error:", error);
+      }
     }
   };
 

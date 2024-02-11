@@ -7,6 +7,7 @@ const ProductModel = ({ data, handleCloseModel, handleAddtoWishlist }) => {
   if (!data) return;
 
   const [featuredImage, setFeaturedImage] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
   const [otherImages, setOtherImages] = useState([]);
   const allImages = data.images;
   const imgObj = useImageFileNameGet(allImages);
@@ -19,6 +20,10 @@ const ProductModel = ({ data, handleCloseModel, handleAddtoWishlist }) => {
   useEffect(() => {
     setFeaturedImage(imgObj.featuredImgName);
     setOtherImages([...imgObj.otherImageName, imgObj.featuredImgName]);
+
+    if (localStorage.getItem("userName") === "Admin") {
+      setIsAdmin(true);
+    }
   }, []);
 
   const handleWishlistBtn = () => {
@@ -147,37 +152,38 @@ const ProductModel = ({ data, handleCloseModel, handleAddtoWishlist }) => {
                 </p>
               </div>
 
-              {/* <p className="ml-2 text-sm font-medium text-gray-500">
+              <p className="mt-5 text-sm font-medium text-gray-900">
                 {data.description}
-              </p> */}
+              </p>
 
               <div className="mt-10 flex flex-col items-center justify-between space-y-4 border-t border-b py-4 sm:flex-row sm:space-y-0">
                 <div className="flex items-end">
                   <h1 className="text-3xl font-bold">${data.price}</h1>
                   {/* <span className="text-base">/month</span> */}
                 </div>
-
-                <button
-                  onClick={handleWishlistBtn}
-                  type="button"
-                  className="inline-flex items-center justify-center rounded-md border-2 border-transparent bg-gray-900 bg-none px-12 py-3 text-center text-base font-bold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-gray-800"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="shrink-0 mr-3 h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth="2"
+                {!isAdmin && (
+                  <button
+                    onClick={handleWishlistBtn}
+                    type="button"
+                    className="inline-flex items-center justify-center rounded-md border-2 border-transparent bg-gray-900 bg-none px-12 py-3 text-center text-base font-bold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-gray-800"
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
-                    />
-                  </svg>
-                  Add to cart
-                </button>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="shrink-0 mr-3 h-5 w-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+                      />
+                    </svg>
+                    Add to cart
+                  </button>
+                )}
               </div>
 
               <ul className="mt-8 space-y-2">

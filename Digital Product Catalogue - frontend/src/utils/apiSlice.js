@@ -1,8 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { API_URL } from './Constants';
 const token = localStorage.getItem('token');
-
-console.log("tooken " + token);
+console.log(localStorage.getItem("userId"));
 const headers = {
     'Content-Type': 'application/json',
     'Authorization': `Bearer ${token}`
@@ -16,30 +15,28 @@ export const apiSlice = createApi({
         getProducts: builder.query({
             query: () => `/product`,
             method: 'GET',
-            headers: headers,
+
             providesTags: ['products']
         }),
         getProductTags: builder.query({
             query: () => `/ProductTag`,
             method: 'GET',
-            headers: headers,
+
             providesTags: ['products']
         }),
         getWishlistProducts: builder.query({
             query: () => `/WishList/${localStorage.getItem('userId')}`,
             method: 'GET',
-            headers: headers,
             providesTags: ['products']
         }),
         addProduct: builder.mutation({
             query: (body) => ({
                 url: '/Product',
                 method: 'POST',
-                headers: {
-                    // 'Content-Type': `multipart/form-data;`,
-                    'Authorization': `Bearer ${token}`,
-                },
-                // headers: headers,
+                // headers: {
+                //     // 'Content-Type': `multipart/form-data;`,
+                //     'Authorization': `Bearer ${token}`,
+                // },
                 body: body
             }),
             invalidatesTags: ['products']

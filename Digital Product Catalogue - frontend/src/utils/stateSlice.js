@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const stateSlice = createSlice({
     name: "state",
     initialState: {
-        showWishlistModel: false
+        showWishlistModel: false,
     },
     reducers: {
         setShowWishlistModel: (state, action) => {

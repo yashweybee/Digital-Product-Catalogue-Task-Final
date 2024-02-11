@@ -16,7 +16,7 @@ const ProductAddPage = () => {
     <>
       <Header />
       <div className="mt-10">
-        <div className="Heading ">
+        <div className="Heading ml-10">
           <h1 className="text-2xl font-bold">Add product</h1>
         </div>
         <ProductForm />

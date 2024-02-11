@@ -19,33 +19,40 @@ const ProductList = () => {
   const [productsData, setProductsData] = useState([]);
   // if (!products) return;
 
-  const setTodoDataOnStateChange = () => {
+  const setProductDataOnStateChange = () => {
     console.log(products);
     // const currentProductData = products;
+    // setProductsData()
 
-    // sortingProductData();
     searchProductDatabasedOnSearchText();
-    // filteringProductDataBasedOnTags();
+    filteringProductDataBasedOnTags();
   };
 
   const searchProductDatabasedOnSearchText = () => {
     if (searchText.length === 0) {
       setProductsData(products);
+      sortingProductData(products);
+      // filteringProductDataBasedOnTags(products);
     } else {
       const searchProducts = products.filter((product) =>
         product.name.toLowerCase().includes(searchText.toLowerCase())
       );
       setProductsData(searchProducts);
+      sortingProductData(searchProducts);
+      // filteringProductDataBasedOnTags(searchProducts);
     }
   };
 
   const filteringProductDataBasedOnTags = () => {
     // console.log(products);
-    const tempData = [...products];
+
+    if (productTags.length === 0) return;
+    const tempData = [...productsData];
+    // const tempData = data;
     const filteredProductsBasedOnTags = tempData.filter((product) => {
       return product.tags.some((tag) => productTags.includes(tag.tagName));
     });
-    console.log(filteredProductsBasedOnTags.length);
+    // console.log(filteredProductsBasedOnTags.length);
     // console.log(products);
     if (filteredProductsBasedOnTags.length === 0) {
       setProductsData(products);
@@ -54,20 +61,23 @@ const ProductList = () => {
     setProductsData(filteredProductsBasedOnTags);
   };
 
-  const sortingProductData = () => {
-    if (productsData.length === 0) return;
-    console.log(productsData);
-    const tempData = [...productsData];
-    console.log(tempData);
+  const sortingProductData = (data) => {
+    if (data.length === 0) return;
+
+    const tempData = [...data];
+
     if (sortingType === "Latest") {
       setProductsData(tempData);
+      // filteringProductDataBasedOnTags(tempData);
     } else if (sortingType === "Price") {
       const sortedProducts = tempData.sort((a, b) => a.price - b.price);
       console.log(sortedProducts);
       setProductsData(sortedProducts);
+      // filteringProductDataBasedOnTags(sortedProducts);
     } else {
       // sortingType === "Oldest"
       setProductsData(tempData.reverse());
+      // filteringProductDataBasedOnTags(tempData.reverse());
     }
   };
 
@@ -103,7 +113,7 @@ const ProductList = () => {
   useEffect(() => {
     if (!products) return;
 
-    setTodoDataOnStateChange();
+    setProductDataOnStateChange();
   }, [products, sortingType, productTags, searchText]);
 
   if (isLoading) {

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import ProductModel from "../ProductModel/ProductModel";
 import { HeartSvg } from "../../utils/svgs";
 import { useDeleteProductMutation } from "../../utils/apiSlice";
+import { useNavigate } from "react-router";
 
 const Product = ({
   handleAddtoWishlist,
@@ -11,6 +12,7 @@ const Product = ({
 }) => {
   if (!data) return;
 
+  const navigate = useNavigate();
   const [imgFileName, setImgFileName] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
@@ -37,7 +39,12 @@ const Product = ({
   }, []);
 
   const handleWishlistBtn = () => {
-    console.log(data.id);
+    if (!localStorage.getItem("token")) {
+      // console.log(localStorage.getItem("token"));
+      console.log("userNot Exist");
+      navigate("/login");
+    }
+    // console.log(data.id);
     handleAddtoWishlist(data.id);
   };
 
@@ -157,7 +164,7 @@ const Product = ({
           href="#"
         >
           <img
-            className="object-cover h-full w-full hover:scale-125 transition-all"
+            className="object-cover h-full w-full hover:scale-110 transition-all"
             src={"../../../Public/Uploads/" + imgFileName}
             alt="product image"
           />

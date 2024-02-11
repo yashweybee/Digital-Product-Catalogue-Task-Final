@@ -10,10 +10,10 @@ const WishlistPage = () => {
   return (
     <>
       <Header />
-      <div className=" ms-auto mt-10">
-        {/* <h1 className="text-2xl font-bold">WishList</h1> */}
-        <Link>Home </Link>
-        <div className="">
+      <div className="ml-20 ms-auto mt-10">
+        <h1 className="text-3xl font-bold">Wishlist</h1>
+
+        <div className="ml-20">
           <WishList />
         </div>
       </div>

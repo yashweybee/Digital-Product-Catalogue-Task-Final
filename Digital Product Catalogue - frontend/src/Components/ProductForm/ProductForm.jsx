@@ -106,7 +106,7 @@ const ProductForm = () => {
 
     console.log(formData.get("ProductTags"));
 
-    // await addProduct(formData);
+    await addProduct(formData);
     setIsToastOpen(true);
     // handleResetBtn();
   };

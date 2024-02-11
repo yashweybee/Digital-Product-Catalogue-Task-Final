@@ -17,7 +17,6 @@ export const userSlice = createApi({
             query: (body) => ({
                 url: '/Login',
                 method: 'POST',
-
                 body: body
             }),
 

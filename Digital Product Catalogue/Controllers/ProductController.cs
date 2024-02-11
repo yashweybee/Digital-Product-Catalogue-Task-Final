@@ -14,7 +14,7 @@ namespace Digital_Product_Catalogue.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+
 
     public class ProductController : ControllerBase
     {
@@ -204,7 +204,6 @@ namespace Digital_Product_Catalogue.Controllers
             return Ok(filePath);
 
         }
-
 
 
         [HttpDelete("{Id}")]

@@ -41,7 +41,7 @@ const WishList = () => {
 
   return (
     <>
-      <div className="flex flex-wrap justify-start">
+      <div className="flex flex-wrap justify-start mt-5">
         {productsData.map((product) => (
           <WishListItem
             handleDeleteWIshlistItem={handleDeleteWIshlistItem}
