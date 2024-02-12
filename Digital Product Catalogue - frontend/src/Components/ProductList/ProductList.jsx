@@ -16,44 +16,54 @@ const ProductList = () => {
   const sortingType = useSelector((store) => store.filter.sortBy);
   const productTags = useSelector((store) => store.filter.filterTags);
   const searchText = useSelector((store) => store.filter.searchText);
+  const priceRangeValues = useSelector(
+    (store) => store?.state?.priceRangeValues
+  );
   const [productsData, setProductsData] = useState([]);
   // if (!products) return;
 
-  const setProductDataOnStateChange = () => {
-    console.log(products);
-    // const currentProductData = products;
-    // setProductsData()
+  const setProductDataBasedOnPriceRange = () => {
+    // console.log(priceRangeValues.min);
+    // let timer;
 
-    searchProductDatabasedOnSearchText();
-    filteringProductDataBasedOnTags();
+    const filteredProducts = products.filter((product) => {
+      return (
+        product.price >= priceRangeValues.min &&
+        product.price <= priceRangeValues.max
+      );
+    });
+
+    setTimeout(() => {
+      setProductsData(filteredProducts);
+    }, 500);
+
+    // clearTimeout(timer);
   };
 
   const searchProductDatabasedOnSearchText = () => {
+    if (!products) return;
     if (searchText.length === 0) {
       setProductsData(products);
-      sortingProductData(products);
-      // filteringProductDataBasedOnTags(products);
+      // sortingProductData(products);
     } else {
       const searchProducts = products.filter((product) =>
         product.name.toLowerCase().includes(searchText.toLowerCase())
       );
       setProductsData(searchProducts);
-      sortingProductData(searchProducts);
-      // filteringProductDataBasedOnTags(searchProducts);
+      // sortingProductData(searchProducts);
     }
   };
 
   const filteringProductDataBasedOnTags = () => {
-    // console.log(products);
+    // if (productTags.length === 0) return;
 
-    if (productTags.length === 0) return;
-    const tempData = [...productsData];
-    // const tempData = data;
+    // console.log(productTags);
+    const tempData = [...products];
+
     const filteredProductsBasedOnTags = tempData.filter((product) => {
       return product.tags.some((tag) => productTags.includes(tag.tagName));
     });
-    // console.log(filteredProductsBasedOnTags.length);
-    // console.log(products);
+
     if (filteredProductsBasedOnTags.length === 0) {
       setProductsData(products);
       return;
@@ -68,16 +78,13 @@ const ProductList = () => {
 
     if (sortingType === "Latest") {
       setProductsData(tempData);
-      // filteringProductDataBasedOnTags(tempData);
     } else if (sortingType === "Price") {
       const sortedProducts = tempData.sort((a, b) => a.price - b.price);
       console.log(sortedProducts);
       setProductsData(sortedProducts);
-      // filteringProductDataBasedOnTags(sortedProducts);
     } else {
       // sortingType === "Oldest"
       setProductsData(tempData.reverse());
-      // filteringProductDataBasedOnTags(tempData.reverse());
     }
   };
 
@@ -111,10 +118,24 @@ const ProductList = () => {
   };
 
   useEffect(() => {
+    sortingProductData(productsData);
+  }, [sortingType]);
+
+  useEffect(() => {
     if (!products) return;
 
-    setProductDataOnStateChange();
-  }, [products, sortingType, productTags, searchText]);
+    searchProductDatabasedOnSearchText();
+  }, [products, searchText]);
+
+  useEffect(() => {
+    if (!products) return;
+    filteringProductDataBasedOnTags();
+  }, [productTags]);
+
+  useEffect(() => {
+    if (!products) return;
+    setProductDataBasedOnPriceRange();
+  }, [priceRangeValues]);
 
   if (isLoading) {
     return <div>Loading...</div>;

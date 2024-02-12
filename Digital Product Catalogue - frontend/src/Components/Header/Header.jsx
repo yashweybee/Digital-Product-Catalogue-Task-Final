@@ -41,9 +41,9 @@ const Header = () => {
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    fill-rule="evenodd"
+                    fillRule="evenodd"
                     d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                    clip-rule="evenodd"
+                    clipRule="evenodd"
                   ></path>
                 </svg>
                 <span className="sr-only">Close modal</span>
@@ -91,9 +91,9 @@ const Header = () => {
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <path
-                  fill-rule="evenodd"
+                  fillRule="evenodd"
                   d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                  clip-rule="evenodd"
+                  clipRule="evenodd"
                 ></path>
               </svg> */}
               <p className="mb-4 text-black dark:text-black">
@@ -123,7 +123,7 @@ const Header = () => {
 
       {/* <nav className="p-2 flex gap-10 items-center shadow-md rounded">
         <div className="">
-          <h1 className="text-xl font-bold">Shooping.com</h1>
+          <h1 className="text-xl font-bold">Trendsetter.com</h1>
         </div>
         <div className="">
           <Search />
@@ -160,17 +160,23 @@ const Header = () => {
               /> */}
               <span className="self-center text-xl font-semibold whitespace-nowrap ">
                 {/* <h1 className="text-3xl">Shopping.com</h1> */}
-                SHooping.com
+                Trendsetter
               </span>
             </Link>
 
             <div className="flex gap-4 items-center lg:order-2">
               <Search />
               <button
-                onClick={() => setShowPopup(!showPopup)}
+                onClick={() => {
+                  if (localStorage.getItem("token")) {
+                    setShowPopup(!showPopup);
+                  } else {
+                    navigate("/login");
+                  }
+                }}
                 className="text-white bg-gray-800  hover:bg-black focus:ring-4  font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2  focus:outline-none"
               >
-                Logout
+                {localStorage.getItem("token") ? "Logout" : "Login"}
               </button>
               {/* <a
                 href="#"
@@ -193,9 +199,9 @@ const Header = () => {
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    fill-rule="evenodd"
+                    fillRule="evenodd"
                     d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-                    clip-rule="evenodd"
+                    clipRule="evenodd"
                   ></path>
                 </svg>
                 <svg
@@ -205,9 +211,9 @@ const Header = () => {
                   xmlns="http://www.w3.org/2000/svg"
                 >
                   <path
-                    fill-rule="evenodd"
+                    fillRule="evenodd"
                     d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                    clip-rule="evenodd"
+                    clipRule="evenodd"
                   ></path>
                 </svg>
               </button>
@@ -225,6 +231,33 @@ const Header = () => {
                     aria-current="page"
                   >
                     Home
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/products"
+                    className="block py-2 pr-4 pl-3 text-gray-800 rounded bg-primary-700 lg:bg-transparent lg:text-primary-700 lg:p-0 "
+                    aria-current="page"
+                  >
+                    Men
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/products"
+                    className="block py-2 pr-4 pl-3 text-gray-800 rounded bg-primary-700 lg:bg-transparent lg:text-primary-700 lg:p-0 "
+                    aria-current="page"
+                  >
+                    Women
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/products"
+                    className="block py-2 pr-4 pl-3 text-gray-800 rounded bg-primary-700 lg:bg-transparent lg:text-primary-700 lg:p-0 "
+                    aria-current="page"
+                  >
+                    Children
                   </Link>
                 </li>
                 <li>

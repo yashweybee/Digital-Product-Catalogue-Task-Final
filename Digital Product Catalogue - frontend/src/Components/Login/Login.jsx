@@ -68,6 +68,9 @@ const Login = () => {
         const { data, error } = await registerEndPoint(userData);
         // const { data, error } = await loginEndPoint(userData);
         if (data) {
+          // navigate("/login");
+          setErrorMess("");
+          setIsLoginPage(true);
         } else if (error) {
           console.log("Regs. error:", error);
           console.log(error);

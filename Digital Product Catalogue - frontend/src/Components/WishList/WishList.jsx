@@ -39,6 +39,15 @@ const WishList = () => {
 
   if (!productsData) return;
 
+  if (productsData.length === 0)
+    return (
+      <div className="text-center">
+        <p className="text-red-700">
+          Your wishlist is empty !! 🙁 Please add some products
+        </p>
+      </div>
+    );
+
   return (
     <>
       <div className="flex flex-wrap justify-start mt-5">

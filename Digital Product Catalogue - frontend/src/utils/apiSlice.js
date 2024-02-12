@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { API_URL } from './Constants';
 const token = localStorage.getItem('token');
-console.log(localStorage.getItem("userId"));
+// console.log(localStorage.getItem("userId"));
 const headers = {
     'Content-Type': 'application/json',
     'Authorization': `Bearer ${token}`

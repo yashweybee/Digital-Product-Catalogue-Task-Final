@@ -25,13 +25,13 @@ const Search = () => {
           <SearchSvg />
         </span>
         <input
-          className=" p-1 pl-9 border border-gray-400 rounded bg-transparent"
+          className=" p-1 pl-9 border border-gray-400 rounded-xl bg-transparent"
           placeholder="Search.."
           type="text"
           value={text}
           onChange={(e) => setText(e.target.value)}
         />
-        {text !== "" && (
+        {/* {text && (
           <button
             className="relative top-2 -left-7"
             type="button"
@@ -39,7 +39,7 @@ const Search = () => {
           >
             <CrossSearchSvg />
           </button>
-        )}
+        )} */}
       </form>
     </div>
 

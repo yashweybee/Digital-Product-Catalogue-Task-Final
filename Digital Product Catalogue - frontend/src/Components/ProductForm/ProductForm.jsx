@@ -1,13 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   useAddProductMutation,
   useGetProductTagsQuery,
 } from "../../utils/apiSlice";
 import Autocomplete from "../Autocomplete/Autocomplete";
-import { CrossSearchSvg, CrossSvg } from "../../utils/svgs";
+import { CrossSearchSvg, CrossSvg, CrossSvgTags } from "../../utils/svgs";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router";
+import useImageFileNameGet from "../../utils/Hooks/useImageFileNameGet";
 const ProductForm = () => {
   const [addProduct] = useAddProductMutation();
   const { data: productTags } = useGetProductTagsQuery();
+
+  const editProductData = useSelector((store) => store?.state?.productEditData);
+  const navigate = useNavigate();
   // console.log(productTags);
   // if (!productTags) return;
 
@@ -69,7 +75,6 @@ const ProductForm = () => {
 
   const handleDeleteTag = (e, tagName) => {
     e.preventDefault();
-    // console.log(tagName);
     const temptags = tags;
 
     const index = temptags.indexOf(tagName);
@@ -80,6 +85,20 @@ const ProductForm = () => {
     // console.log(temptags.length);
     setTags(temptags);
   };
+
+  const setDataonStateChange = () => {
+    setName("");
+    setDesc("");
+    setPrice("");
+    setTags([]);
+    setTagText("");
+    setImageFiles([]);
+    setFeaturedImageFile([]);
+    setTempFeaturedFile("https://placehold.co/600x400?text=Featured+Image");
+    setTempImagesFile([]);
+  };
+
+  useEffect(() => {}, [tags]);
 
   const handleSubmitBtn = async (e) => {
     e.preventDefault();
@@ -104,16 +123,36 @@ const ProductForm = () => {
 
     // console.log(desc);
 
-    console.log(formData.get("ProductTags"));
+    // console.log(formData.get("ProductTags"));
 
     await addProduct(formData);
     setIsToastOpen(true);
-    // handleResetBtn();
+    handleResetBtn();
   };
 
   const handleCloseToast = () => {
     setIsToastOpen(false);
   };
+
+  const setEditProductData = () => {
+    if (!editProductData) return;
+    const imgObj = useImageFileNameGet(editProductData.images);
+
+    // setName(editProductData.name);
+    // setDesc(editProductData.description);
+    // setPrice(editProductData.price);
+    // setTags(editProductData.tags);
+    // setTagText("");
+    // setImageFiles([]);
+    // setFeaturedImageFile([]);
+    // setTempFeaturedFile("../../../Public/Uploads/" + imgObj.featuredImgName);
+    // setTempImagesFile([]);
+  };
+
+  useEffect(() => {
+    if (editProductData.length === 0) return;
+    setEditProductData();
+  }, [editProductData]);
 
   // console.log(tags);
   return (
@@ -193,7 +232,7 @@ const ProductForm = () => {
                     type="button w-1"
                     onClick={(e) => handleDeleteTag(e, tag)}
                   >
-                    <CrossSvg />
+                    <CrossSvgTags />
                   </button>
                 </li>
               ))}
@@ -240,7 +279,7 @@ const ProductForm = () => {
             {tempImagesFiles.map((file) => (
               <img
                 key={file}
-                src={file}
+                src={file || `../../../Public/Uploads/` + file}
                 alt="featured product image"
                 className="w-[10em] m-2 object-cover rounded"
               />

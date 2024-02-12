@@ -19,8 +19,8 @@ const Autocomplete = ({ suggestions = [], handleTags }) => {
     setShowSuggestions(true);
     setFilteredSuggestions(filteredSuggestions);
     setUserInput(e.currentTarget.value);
-    console.log("filter-s" + filteredSuggestions);
-    console.log(userInput);
+    // console.log("filter-s" + filteredSuggestions);
+    // console.log(userInput);
   };
 
   const onClick = (e) => {
@@ -76,7 +76,7 @@ const Autocomplete = ({ suggestions = [], handleTags }) => {
               <li
                 className={
                   classNameSugegst
-                    ? `${classNameSugegst} bg-gray-300 w-full bg-white p-2`
+                    ? `${classNameSugegst} w-full bg-gray-600 text-white p-2`
                     : "" + "w-full bg-white p-2 border-b-2 border-gray-400 "
                 }
                 key={suggestion}

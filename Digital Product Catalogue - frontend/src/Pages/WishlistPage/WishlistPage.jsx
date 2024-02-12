@@ -10,8 +10,10 @@ const WishlistPage = () => {
   return (
     <>
       <Header />
-      <div className="ml-20 ms-auto mt-10">
-        <h1 className="text-3xl font-bold">Wishlist</h1>
+      <div className="ms-auto mt-10">
+        <h1 className="ml-20 text-3xl font-bold">
+          {localStorage.getItem("userName")}, you'r wishlist
+        </h1>
 
         <div className="ml-20">
           <WishList />

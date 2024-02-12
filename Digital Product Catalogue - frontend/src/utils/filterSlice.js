@@ -11,10 +11,8 @@ const filterSlice = createSlice({
     },
     reducers: {
         setFilterTags: (state, action) => {
-
             const copyArray = [...action.payload];
-            console.log(copyArray);
-            // copyArray[index] = action.payload
+            // console.log(copyArray);
             return {
                 ...state,
                 filterTags: copyArray
