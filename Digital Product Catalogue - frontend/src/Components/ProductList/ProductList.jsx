@@ -3,13 +3,16 @@ import {
   useAddWishlistItemMutation,
   useDeleteProductMutation,
   useGetProductsQuery,
+  useGetWishlistProductsQuery,
 } from "../../utils/apiSlice";
 import Product from "../Product/Product";
 import ProductModel from "../ProductModel/ProductModel";
 import { useSelector } from "react-redux";
+import EditModel from "../EditModel/EditModel";
 const ProductList = () => {
   const [clickedProduct, setClickedProduct] = useState(null);
   const { data: products, isLoading } = useGetProductsQuery();
+  const { data: wishlistProducts } = useGetWishlistProductsQuery();
   const [addToWishlist] = useAddWishlistItemMutation();
   const [deleteProduct] = useDeleteProductMutation();
   const [isOpen, setIsOpen] = useState(false);
@@ -145,6 +148,8 @@ const ProductList = () => {
     return <div>No products available.</div>;
   }
 
+  // console.log(wishlistProducts);
+
   return (
     <div className="flex flex-wrap justify-start ">
       {productsData.map((product) => (
@@ -152,6 +157,8 @@ const ProductList = () => {
           handleOpenModel={handleOpenModel}
           handleAddtoWishlist={handleAddtoWishlist}
           handelDeleteItem={handelDeleteItem}
+          // isInWishlist={isInWishlist}
+          // wishlistData={wishlistProducts}
           data={product}
           key={product.id}
         />

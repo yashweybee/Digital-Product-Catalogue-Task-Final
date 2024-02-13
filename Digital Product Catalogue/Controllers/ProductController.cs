@@ -163,6 +163,74 @@ namespace Digital_Product_Catalogue.Controllers
         }
 
 
+
+        [HttpPost("edit")]
+        public async Task<ActionResult> Edit([FromForm] ProductEditDTO productEditDTO)
+        {
+
+            var product = new Product
+            {
+                Name = productEditDTO.Name,
+                Description = productEditDTO.Description,
+                Price = (Decimal)productEditDTO.Price,
+            };
+
+            var productToAdd = _mapper.Map<Product>(product);
+            _context.Products.Add(productToAdd);
+            await _context.SaveChangesAsync();
+
+            Product? lastEnteredProduct = await _context.Products.OrderByDescending(x => x.Id).FirstOrDefaultAsync();
+
+
+
+            //Other Images
+
+
+
+
+            //Featured Image
+            IFormFile featuredImg = (IFormFile)GetFile(productEditDTO.FeaturedImage);
+
+
+
+
+            //Product-Tags
+            //string[] productTags = productCreateDTO.ProductTags;
+            string[] productTags = productEditDTO.ProductTags.Split(',');
+
+
+            foreach (string tag in productTags)
+            {
+                var tagItem = new ProductTag
+                {
+                    ProductId = lastEnteredProduct.Id,
+                    TagName = tag
+                };
+
+                _context.ProductTags.Add(tagItem);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return Ok("Product Added");
+        }
+
+        [HttpGet("{fileName}")]
+        public IActionResult GetFile(string fileName)
+        {
+            string absolutePath = @"D:\Digital Product Catalogue Task\Digital Product Catalogue - frontend\public\Uploads\";
+            var filePath = Path.Combine(absolutePath, fileName);
+
+            if (!System.IO.File.Exists(filePath))
+            {
+                return NotFound(); // File not found
+            }
+
+            var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+            return File(fileStream, "application/octet-stream");
+        }
+
+
         [HttpGet("image")]
         public async Task<ActionResult> handleImages(IFormFile imgFile)
         {

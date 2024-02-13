@@ -75,15 +75,17 @@ const ProductForm = () => {
 
   const handleDeleteTag = (e, tagName) => {
     e.preventDefault();
-    const temptags = tags;
+    // const temptags = tags;
 
-    const index = temptags.indexOf(tagName);
-    if (index > -1) {
-      // only splice array when item is found
-      temptags.splice(index, 1);
-    }
-    // console.log(temptags.length);
-    setTags(temptags);
+    // const index = temptags.indexOf(tagName);
+    // if (index > -1) {
+    //   // only splice array when item is found
+    //   temptags.splice(index, 1);
+    // }
+    // console.log(temptags);
+
+    const updatedTags = tags.filter((tag) => tag !== tagName);
+    setTags(updatedTags);
   };
 
   const setDataonStateChange = () => {
@@ -97,8 +99,6 @@ const ProductForm = () => {
     setTempFeaturedFile("https://placehold.co/600x400?text=Featured+Image");
     setTempImagesFile([]);
   };
-
-  useEffect(() => {}, [tags]);
 
   const handleSubmitBtn = async (e) => {
     e.preventDefault();
@@ -134,27 +134,6 @@ const ProductForm = () => {
     setIsToastOpen(false);
   };
 
-  const setEditProductData = () => {
-    if (!editProductData) return;
-    const imgObj = useImageFileNameGet(editProductData.images);
-
-    // setName(editProductData.name);
-    // setDesc(editProductData.description);
-    // setPrice(editProductData.price);
-    // setTags(editProductData.tags);
-    // setTagText("");
-    // setImageFiles([]);
-    // setFeaturedImageFile([]);
-    // setTempFeaturedFile("../../../Public/Uploads/" + imgObj.featuredImgName);
-    // setTempImagesFile([]);
-  };
-
-  useEffect(() => {
-    if (editProductData.length === 0) return;
-    setEditProductData();
-  }, [editProductData]);
-
-  // console.log(tags);
   return (
     <div className="product-form-component bg-white mt-5 rounded">
       {isToastOpen && (

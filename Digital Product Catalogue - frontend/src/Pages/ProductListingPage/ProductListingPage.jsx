@@ -5,13 +5,18 @@ import Filter from "../../Components/Filter/Filter";
 import Sorting from "../../Components/Sorting/Sorting";
 import Footer from "../../Components/Footer/Footer";
 import WishList from "../../Components/WishList/WishList";
+import { useNavigate } from "react-router";
 
 const ProductListingPage = () => {
   const [isAdmin, setIsAdmin] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (localStorage.getItem("userName") === "Admin") {
       setIsAdmin(true);
+    }
+    if (!localStorage.getItem("userName")) {
+      navigate("/login");
     }
   }, []);
   return (

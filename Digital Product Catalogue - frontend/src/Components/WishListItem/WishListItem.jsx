@@ -1,36 +1,41 @@
 import React, { useEffect, useState } from "react";
 import useImageFileNameGet from "../../utils/Hooks/useImageFileNameGet";
+import { useDeleteWishlistItemMutation } from "../../utils/apiSlice";
 
-const WishListItem = ({ data, handleDeleteWIshlistItem }) => {
+const WishListItem = ({ data, handleOpenModel }) => {
   if (!data) return;
 
   const { product, productImages, productTags } = data;
+  const [deleteWishlistItem] = useDeleteWishlistItemMutation();
   const [productData, setProductData] = useState([]);
   // const [showPopup, setShowPopup] = useState(false);
 
   const imgObj = useImageFileNameGet(productImages);
-  // console.log(imgObj);
 
   useEffect(() => {
     setProductData(data);
-  }, [product]);
+  }, [data]);
 
   return (
     <>
       <div className="relative m-2 mx-1 flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white  cursor-pointer transition-all">
         <div
-          className="relative mx-3 mt-3 h-60 overflow-hidden rounded bg-gray-200"
+          className="relative mx-3 mt-3 h-60 overflow-hidden rounded bg-gray-200 "
           href="#"
         >
           <img
-            className="object-cover h-full w-full"
+            onClick={() => handleOpenModel(product.id)}
+            className="object-cover h-full w-full hover:scale-105 transition-all"
             src={"../../../Public/Uploads/" + imgObj.featuredImgName}
             alt="product image"
           />
         </div>
         <div className="mt-4 px-5 pb-5">
           <div>
-            <h5 className="text-xl tracking-tight text-slate-900">
+            <h5
+              onClick={() => handleOpenModel(product.id)}
+              className="text-xl tracking-tight text-slate-900"
+            >
               {product.name}
             </h5>
           </div>
@@ -70,8 +75,8 @@ const WishListItem = ({ data, handleDeleteWIshlistItem }) => {
           </div>
 
           <button
-            onClick={() => handleDeleteWIshlistItem(product.id)}
-            className="text-red-700"
+            onClick={() => deleteWishlistItem(product.id)}
+            className="text-red-700 mt-3"
           >
             Remove
           </button>

@@ -3,41 +3,60 @@ import { useDispatch, useSelector } from "react-redux";
 import { setShowWishlistModel } from "../../utils/stateSlice";
 import Product from "../Product/Product";
 import {
+  useAddWishlistItemMutation,
   useDeleteWishlistItemMutation,
   useGetWishlistProductsQuery,
 } from "../../utils/apiSlice";
 import WishListItem from "../WishListItem/WishListItem";
 
 const WishList = () => {
-  const { data: products } = useGetWishlistProductsQuery();
+  const { data: products, isLoading } = useGetWishlistProductsQuery();
   const [deleteWishlistItem] = useDeleteWishlistItemMutation();
-
+  const [clickedProduct, setClickedProduct] = useState(null);
+  const [addToWishlist] = useAddWishlistItemMutation();
   const [productsData, setProductsData] = useState([]);
-
-  const setdataOnStateChange = () => {
-    console.log(products);
-    setProductsData(products);
-  };
 
   useEffect(() => {
     if (!products) return;
-    setdataOnStateChange();
+    setProductsData(products);
   }, [products]);
 
   const handleDeleteWIshlistItem = async (productId) => {
     console.log(productId);
     try {
       await deleteWishlistItem(productId);
-      // Update state after successful deletion
+
       const tempData = productsData.filter((p) => p.product.id !== productId);
-      // console.log(tempData);
+
       setProductsData(tempData);
     } catch (error) {
       console.error("Error deleting wishlist item:", error);
     }
   };
 
-  if (!productsData) return;
+  const handleAddtoWishlist = (productId) => {
+    const wishlistItem = {
+      userId: localStorage.getItem("userId"),
+      productId: productId,
+    };
+    // console.log(localStorage.getItem("userId"));
+    addToWishlist(wishlistItem);
+  };
+
+  const handleCloseModel = () => {
+    // setIsOpen(false);
+    setClickedProduct(null);
+  };
+
+  const handleOpenModel = (modelId) => {
+    const modelData = products.find((p) => p.id === modelId);
+    // setIsOpen(true);
+    setClickedProduct(modelData);
+  };
+
+  // if (!productsData) return;
+
+  if (isLoading) return <>....Loading</>;
 
   if (productsData.length === 0)
     return (
@@ -53,11 +72,19 @@ const WishList = () => {
       <div className="flex flex-wrap justify-start mt-5">
         {productsData.map((product) => (
           <WishListItem
-            handleDeleteWIshlistItem={handleDeleteWIshlistItem}
+            handleOpenModel={handleOpenModel}
             data={product}
             key={product.product.id}
           />
         ))}
+
+        {clickedProduct && (
+          <ProductModel
+            handleAddtoWishlist={handleAddtoWishlist}
+            data={clickedProduct}
+            handleCloseModel={handleCloseModel}
+          />
+        )}
       </div>
     </>
   );

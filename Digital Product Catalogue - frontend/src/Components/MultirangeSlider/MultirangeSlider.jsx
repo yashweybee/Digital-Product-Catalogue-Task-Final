@@ -49,11 +49,6 @@ const MultirangeSlider = ({ min, max, onChange }) => {
         min={min}
         max={max}
         value={minVal}
-        // onMouseUp={(event) => {
-        //   const value = Math.min(Number(event.target.value), maxVal);
-        //   setMinVal(value);
-        //   minValRef.current = value;
-        // }}
         onChange={(event) => {
           const value = Math.min(Number(event.target.value), maxVal);
           setMinVal(value);
@@ -67,11 +62,6 @@ const MultirangeSlider = ({ min, max, onChange }) => {
         min={min}
         max={max}
         value={maxVal}
-        // onMouseUp={(event) => {
-        //   const value = Math.min(Number(event.target.value), maxVal);
-        //   setMinVal(value);
-        //   minValRef.current = value;
-        // }}
         onChange={(event) => {
           const value = Math.max(Number(event.target.value), minVal);
           setMaxVal(value);

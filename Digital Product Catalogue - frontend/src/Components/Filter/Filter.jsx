@@ -79,7 +79,7 @@ const Filter = () => {
         )}
       </div>
 
-      <div className="p-4 mb-5 bg-white border border-gray-200 ">
+      <div className="p-4 mb-5 bg-white border border-gray-200 z-0">
         <h2 className="text-2xl font-bold text-black">Price</h2>
         <div className="w-16 pb-2 mb-6 border-b border-rose-600 dark:border-gray-400"></div>
         {/* <div>
@@ -107,22 +107,6 @@ const Filter = () => {
             handlePriceRangeValues({ min: min, max: max })
           }
         />
-
-        {/* <MultiRangeSlider
-          min={0}
-          max={100}
-          step={5}
-          minValue={0}
-          maxValue={100}
-          ruler={false}
-          preventWheel={true}
-          onInput={(e) => {
-            // handleInput(e);
-            // set_minValue(e.minValue);
-            // set_maxValue(e.maxValue);
-            // console.log();
-          }}
-        /> */}
       </div>
     </div>
   );

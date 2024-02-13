@@ -1,12 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Search from "../Search/Search";
 import { useDispatch, useSelector } from "react-redux";
 import { setShowWishlistModel } from "../../utils/stateSlice";
+import { useGetWishlistProductsQuery } from "../../utils/apiSlice";
 
 const Header = () => {
   const [showPopup, setShowPopup] = useState(false);
+  const { data: products } = useGetWishlistProductsQuery();
+  const [numbersOfWishlistItems, setNumbersOfWishlistItems] = useState(0);
+
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!products) return;
+    setNumbersOfWishlistItems(products.length);
+  }, [products]);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -275,7 +284,7 @@ const Header = () => {
                     className="block py-2 pr-4 pl-3 text-gray-800 rounded bg-primary-700 lg:bg-transparent lg:text-primary-700 lg:p-0 "
                     aria-current="page"
                   >
-                    Wishlist
+                    Wishlist({numbersOfWishlistItems})
                   </Link>
                 </li>
               </ul>

@@ -28,11 +28,11 @@
 }
 
 .thumb--left {
-    z-index: 3;
+    z-index: 1;
 }
 
 .thumb--right {
-    z-index: 4;
+    z-index: 1;
 }
 
 /* For Chrome browsers */
@@ -99,12 +99,12 @@
 .slider__track {
     background-color: hsl(0, 0%, 91%);
     width: 100%;
-    z-index: 1;
+    /* z-index: 0; */
 }
 
 .slider__range {
     background-color: #222222;
-    z-index: 2;
+    /* z-index: 0; */
 }
 
 .slider__left-value,
@@ -112,6 +112,7 @@
     color: #000;
     font-size: 12px;
     margin-top: 20px;
+
 }
 
 .slider__left-value {
