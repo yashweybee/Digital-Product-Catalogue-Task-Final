@@ -7,9 +7,12 @@ const useImageFileNameGet = (allImages) => {
     }
 
     const featuredImg = allImages.filter((img) => img.isFeatured == true);
-    if (featuredImg[0]) {
+    if (featuredImg && featuredImg[0]) {
         const fileName = getImgFileName(featuredImg[0].path);
         imgObj.featuredImgName = fileName
+    } else {
+        imgObj.featuredImgName = ""
+
     }
 
     const otherImages = allImages.filter((img) => img.isFeatured == false);

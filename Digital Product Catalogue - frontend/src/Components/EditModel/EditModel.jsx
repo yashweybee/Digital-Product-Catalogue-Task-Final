@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
   useAddFeaturedImageMutation,
+  useAddOtherImagesMutation,
   useAddTagMutation,
   useDeleteImageMutation,
   useDeleteTagMutation,
@@ -19,6 +20,7 @@ const EditModel = ({ data, handleEditPopup }) => {
 
   const [deleteImage] = useDeleteImageMutation();
   const [addFeaturedImage] = useAddFeaturedImageMutation();
+  const [addOtherImages] = useAddOtherImagesMutation();
 
   const [editProduct] = useEditProductMutation();
   const { data: productTags } = useGetProductTagsQuery();
@@ -28,7 +30,6 @@ const EditModel = ({ data, handleEditPopup }) => {
   const [price, setPrice] = useState(data.price);
   const [tags, setTags] = useState([]);
   const [tagText, setTagText] = useState("");
-  const [imageFiles, setImageFiles] = useState([]);
   const [tempFeaturedFile, setTempFeaturedFile] = useState(
     "https://placehold.co/600x400?text=Featured+Image"
   );
@@ -48,8 +49,6 @@ const EditModel = ({ data, handleEditPopup }) => {
       return `../../../Public/Uploads/${img}`;
     });
     setTempImagesFile(otherImgsTemp);
-
-    setImageFiles(imgObj.otherImageName);
   };
 
   useEffect(() => {
@@ -73,11 +72,31 @@ const EditModel = ({ data, handleEditPopup }) => {
   };
 
   const handleImages = async (e) => {
-    const allFiles = Array.from(e.target.files);
-    const tempFiles = allFiles.map((f) => URL.createObjectURL(f));
+    console.log(tempImagesFiles);
 
-    setTempImagesFile(tempFiles);
-    setImageFiles(e.target.files);
+    const imgIdArray = tempImagesFiles.map((img) => {
+      const imgPathArray = img.split("/");
+      const imgName = imgPathArray[imgPathArray.length - 1];
+      const [{ id }] = data.images.filter((img) => img.path.includes(imgName));
+      return id;
+    });
+    console.log(imgIdArray);
+    imgIdArray.forEach((imgId) => deleteImage(imgId));
+
+    const allFiles = e.target.files;
+
+    const formData = new FormData();
+    formData.append("ProductId", data.id);
+    for (let i = 0; i < allFiles.length; i++) {
+      formData.append("OtherImages", allFiles[i]);
+    }
+
+    const { data: resAddOtherImages } = addOtherImages(formData);
+    const imgObj = useImageFileNameGet(resAddOtherImages);
+    const otherImgsTemp = imgObj.otherImageName.map((img) => {
+      return `../../../Public/Uploads/${img}`;
+    });
+    setTempImagesFile(otherImgsTemp);
   };
 
   const handleDeleteImage = (file) => {
@@ -85,6 +104,10 @@ const EditModel = ({ data, handleEditPopup }) => {
     const imgName = imgPathArray[imgPathArray.length - 1];
     const [{ id }] = data.images.filter((img) => img.path.includes(imgName));
     deleteImage(id);
+
+    const tempFiles = tempImagesFiles.filter((img) => !img.includes(imgName));
+    // console.log(tempFiles);
+    setTempImagesFile(tempFiles);
   };
 
   const handleFeaturedImage = async (e) => {
@@ -132,7 +155,7 @@ const EditModel = ({ data, handleEditPopup }) => {
       productId: data.id,
       formData: formData,
     };
-    // await editProduct(editData);
+    await editProduct(editData);
     handleEditPopup();
   };
 
@@ -147,7 +170,7 @@ const EditModel = ({ data, handleEditPopup }) => {
       <div className=" p-4 md:h-auto z-50 ">
         <div className="absolute top-0 right-0 left-0 z-50 w-[80%] bg-white m-auto mt-10 rounded">
           <form className="product-form m-auto flex flex-col px-10 py-5">
-            <label htmlFor="name" className="my-5">
+            <label htmlFor="name" className="my-2">
               Name
               <input
                 required
@@ -163,7 +186,7 @@ const EditModel = ({ data, handleEditPopup }) => {
               />
             </label>
 
-            <label htmlFor="price" className="my-5">
+            <label htmlFor="price" className="my-2">
               Price
               <input
                 type="number"
@@ -214,7 +237,7 @@ const EditModel = ({ data, handleEditPopup }) => {
                     onChange={handleFeaturedImage}
                     className="mt-2 p-1 pl-2 w-full border border-gray-400  rounded hidden"
                   />
-                  <div className="w-[10em] h-[10em] border border-gray-300  rounded">
+                  <div className="w-[15em] h-[15em] border border-gray-300  rounded">
                     {tempFeaturedFile && (
                       <img
                         src={tempFeaturedFile}

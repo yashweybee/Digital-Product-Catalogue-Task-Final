@@ -3,6 +3,7 @@ using Digital_Product_Catalogue.DTOs;
 using Digital_Product_Catalogue.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.RegularExpressions;
 
 namespace Digital_Product_Catalogue.Controllers
 {
@@ -38,6 +39,35 @@ namespace Digital_Product_Catalogue.Controllers
             _context.ProductImages.Add(productFeaturedImg);
             await _context.SaveChangesAsync();
             return Ok();
+        }
+
+        [HttpPost("OtherImages")]
+        public async Task<ActionResult> PostOtherImages([FromForm] ProductOtherImagesCreateDTO productOtherImagesCreateDTO)
+        {
+
+            var allImages = productOtherImagesCreateDTO.OtherImages;
+            List<ProductImage> responseOtherImages = new List<ProductImage>();
+
+            foreach (IFormFile imgFile in allImages)
+            {
+                var imgFilePath = (ObjectResult)await handleImages(imgFile);
+                string fp2 = imgFilePath.Value.ToString();
+
+
+                var productImage = new ProductImage
+                {
+
+                    IsFeatured = false,
+                    ProductId = productOtherImagesCreateDTO.ProductId,
+                    Path = fp2
+                };
+                responseOtherImages.Add(productImage);
+
+                _context.ProductImages.Add(productImage);
+            }
+
+            await _context.SaveChangesAsync();
+            return Ok(responseOtherImages);
         }
 
 

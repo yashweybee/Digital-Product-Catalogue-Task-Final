@@ -66,7 +66,16 @@ export const apiSlice = createApi({
                 // headers: headers,
                 body: body
             }),
-            invalidatesTags: ['wishlist']
+            invalidatesTags: ['products']
+        }),
+        addOtherImages: builder.mutation({
+            query: (body) => ({
+                url: '/ProductImage/OtherImages',
+                method: 'POST',
+                // headers: headers,
+                body: body
+            }),
+            invalidatesTags: ['products']
         }),
         editProduct: builder.mutation({
             query: (body) => ({
@@ -120,6 +129,7 @@ export const {
     useAddWishlistItemMutation,
     useAddTagMutation,
     useAddFeaturedImageMutation,
+    useAddOtherImagesMutation,
     useEditProductMutation,
     useDeleteProductMutation,
     useDeleteWishlistItemMutation,
