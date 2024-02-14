@@ -282,14 +282,6 @@ namespace Digital_Product_Catalogue.Controllers
 
             await _context.SaveChangesAsync();
             return NoContent();
-
-            //var productTagsData = _context.ProductTags.Where(tag => tag.ProductId == Id);
-            //var productImagesToDelete = _context.ProductImages.Where(pi => pi.ProductId == Id);
-            //_context.ProductImages.RemoveRange(productImagesToDelete);
-            //_context.ProductTags.RemoveRange(productTagsData);
-            //_context.Products.Remove(product);
-            //await _context.SaveChangesAsync();
-            //return NoContent();
         }
 
 

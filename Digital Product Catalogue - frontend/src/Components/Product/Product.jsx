@@ -224,7 +224,7 @@ const Product = ({
         >
           <img
             // className="object-cover h-full w-full hover:scale-110 transition-all"
-            className="object-cover h-60 w-full hover:scale-110 transition-all"
+            className="object-cover h-full w-full hover:scale-110 transition-all"
             src={"../../../Public/Uploads/" + imgFileName}
             alt="product image"
           />

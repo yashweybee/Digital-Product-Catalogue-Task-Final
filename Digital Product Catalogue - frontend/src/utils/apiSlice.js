@@ -10,7 +10,7 @@ const headers = {
 export const apiSlice = createApi({
     reducerPath: "api",
     baseQuery: fetchBaseQuery({ baseUrl: API_URL }),
-    tagTypes: ['products', 'wishlist'],
+    tagTypes: ['products', 'wishlist', 'tags'],
     endpoints: (builder) => ({
         getProducts: builder.query({
             query: () => `/product`,
@@ -50,6 +50,15 @@ export const apiSlice = createApi({
             }),
             invalidatesTags: ['wishlist']
         }),
+        addTag: builder.mutation({
+            query: (body) => ({
+                url: '/ProductTag',
+                method: 'POST',
+                // headers: headers,
+                body: body
+            }),
+            invalidatesTags: ['wishlist']
+        }),
         editProduct: builder.mutation({
             query: (body) => ({
                 url: `/Product/${body.productId}`,
@@ -75,6 +84,15 @@ export const apiSlice = createApi({
             }),
             invalidatesTags: ['wishlist']
         }),
+
+        deleteTag: builder.mutation({
+            query: (tagId) => ({
+                url: `/ProductTag/${tagId}`,
+                method: 'DELETE',
+                // headers: headers,
+            }),
+            invalidatesTags: ['tags']
+        }),
     })
 })
 
@@ -84,7 +102,9 @@ export const {
     useGetWishlistProductsQuery,
     useAddProductMutation,
     useAddWishlistItemMutation,
+    useAddTagMutation,
     useEditProductMutation,
     useDeleteProductMutation,
-    useDeleteWishlistItemMutation
+    useDeleteWishlistItemMutation,
+    useDeleteTagMutation
 } = apiSlice;

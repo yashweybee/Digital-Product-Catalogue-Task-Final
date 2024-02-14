@@ -32,15 +32,47 @@ namespace Digital_Product_Catalogue.Controllers
             return Ok(productTags);
         }
 
-        [HttpPost]
-        public async Task<ActionResult> Post([FromBody] WishlistCreateDTO wishlistCreateDTO)
+
+        [HttpGet("{Id}", Name = "GetTag")]
+        public async Task<ActionResult<ProductTagDTO>> Get(int Id)
         {
-            var wishlistItem = _mapper.Map<WishList>(wishlistCreateDTO);
-            _context.Add(wishlistItem);
-            await _context.SaveChangesAsync();
-            //var partyDTO = _mapper.Map<WishlistDTO>(wishlistItem);
-            return Ok("Wishlist Added");
+
+            var tag = await _context.ProductTags.FirstOrDefaultAsync(x => x.Id == Id);
+            var tagDTO = _mapper.Map<ProductTagDTO>(tag);
+            return tagDTO;
         }
+
+
+        [HttpPost]
+        public async Task<ActionResult> PostTag([FromBody] ProductTagCreateDTO productTagCreateDTO)
+        {
+
+            var productTag = new ProductTag
+            {
+                ProductId = productTagCreateDTO.ProductId,
+                TagName = productTagCreateDTO.TagName,
+            };
+
+            var productTagToAdd = _mapper.Map<ProductTag>(productTag);
+            _context.ProductTags.Add(productTagToAdd);
+            await _context.SaveChangesAsync();
+            var tagDTO = _mapper.Map<ProductTagDTO>(productTagToAdd);
+            return new CreatedAtRouteResult("GetTag", new { productTagToAdd.Id }, tagDTO);
+        }
+
+        [HttpDelete("{Id}")]
+        public async Task<ActionResult> Delete(int Id)
+        {
+            var productTag = await _context.ProductTags.FindAsync(Id);
+            if (productTag == null)
+            {
+                return NotFound();
+            }
+            _context.Remove(productTag);
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
 
 
 

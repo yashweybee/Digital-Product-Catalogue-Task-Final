@@ -1,26 +1,22 @@
 import React, { useEffect, useState } from "react";
 import {
-  useAddProductMutation,
-  useDeleteProductMutation,
+  useAddTagMutation,
+  useDeleteTagMutation,
   useEditProductMutation,
   useGetProductTagsQuery,
 } from "../../utils/apiSlice";
 import Autocomplete from "../Autocomplete/Autocomplete";
-import { CrossSearchSvg, CrossSvg, CrossSvgTags } from "../../utils/svgs";
+import { CrossSvgTags } from "../../utils/svgs";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import useImageFileNameGet from "../../utils/Hooks/useImageFileNameGet";
 
 const EditModel = ({ data, handleEditPopup }) => {
-  // const [addProduct] = useAddProductMutation();
-  // const [deleteProduct] = useDeleteProductMutation();
+  const [deleteTag] = useDeleteTagMutation();
+  const [addTag] = useAddTagMutation();
+
   const [editProduct] = useEditProductMutation();
   const { data: productTags } = useGetProductTagsQuery();
-
-  const editProductData = useSelector((store) => store?.state?.productEditData);
-  const navigate = useNavigate();
-  // console.log(productTags);
-  // if (!productTags) return;
 
   const [name, setName] = useState("");
   const [desc, setDesc] = useState("");
@@ -39,8 +35,8 @@ const EditModel = ({ data, handleEditPopup }) => {
     setName(data.name);
     setDesc(data.description);
     setPrice(data.price);
-    const tagsTemp = data.tags.map((tag) => tag.tagName);
-    setTags(tagsTemp);
+    // const tagsTemp = data.tags.map((tag) => tag.tagName);
+    setTags(data.tags);
     const imgObj = useImageFileNameGet(data.images);
 
     setTempFeaturedFile(`../../../Public/Uploads/${imgObj.featuredImgName}`);
@@ -48,52 +44,27 @@ const EditModel = ({ data, handleEditPopup }) => {
       return `../../../Public/Uploads/${img}`;
     });
     setTempImagesFile(otherImgsTemp);
-
-    // const featuredImg = createFile(
-    //   `../../../Public/Uploads/${imgObj.featuredImgName}`
-    // );
-
-    // setFeaturedImageFile(
-    //   new File(
-    //     [`../../../Public/Uploads/${imgObj.featuredImgName}`],
-    //     imgObj.featuredImgName
-    //   )
-    // );
     setFeaturedImageFile(imgObj.featuredImgName);
-
-    // const fOtherImages = imgObj.otherImageName.map((img) => {
-    //   return new File([`../../../Public/Uploads/${img}`], img);
-    // });
-
-    // setImageFiles(fOtherImages);
     setImageFiles(imgObj.otherImageName);
   };
-
-  async function createFile(filePath) {
-    let response = await fetch(filePath);
-    let data = await response.blob();
-    let metadata = {
-      type: "image/jpeg",
-    };
-    let file = new File([data], "test.jpg", metadata);
-    return file;
-  }
 
   useEffect(() => {
     window.scrollTo(0, 0);
     setEditData();
   }, []);
 
-  const handleTags = (e, tagValue) => {
+  const handleTags = async (e, tagValue) => {
     e.preventDefault();
     if (!tagValue) return;
     const tagTextTruncate = tagValue.trim();
-    const newTags = [...tags, tagTextTruncate];
-    const finialArr = newTags.filter(
-      (item, index) => newTags.indexOf(item) === index
-    );
 
-    setTags(finialArr);
+    const tagObj = { productId: data.id, tagName: tagTextTruncate };
+
+    const { data: resAddTag } = await addTag(tagObj);
+
+    const newTags = [...tags, resAddTag];
+
+    setTags(newTags);
     setTagText("");
   };
 
@@ -114,10 +85,12 @@ const EditModel = ({ data, handleEditPopup }) => {
     setFeaturedImageFile(myFile);
   };
 
-  const handleDeleteTag = (e, tagName) => {
+  const handleDeleteTag = (e, tagData) => {
     e.preventDefault();
+    console.log(tagData.id);
+    deleteTag(tagData.id);
 
-    const updatedTags = tags.filter((tag) => tag !== tagName);
+    const updatedTags = tags.filter((tag) => tag.id !== tagData.id);
     setTags(updatedTags);
   };
 
@@ -139,10 +112,8 @@ const EditModel = ({ data, handleEditPopup }) => {
       productId: data.id,
       formData: formData,
     };
-
-    // console.log(formData.get("Price"));
-
-    await editProduct(editData);
+    // await editProduct(editData);
+    handleEditPopup();
   };
 
   return (
@@ -154,38 +125,36 @@ const EditModel = ({ data, handleEditPopup }) => {
     >
       <div className="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
       <div className=" p-4 md:h-auto z-50 ">
-        <div className="absolute top-0 right-0 left-0 z-50 w-[80%] bg-white m-auto mt-20 rounded">
+        <div className="absolute top-0 right-0 left-0 z-50 w-[80%] bg-white m-auto mt-10 rounded">
           <form className="product-form m-auto flex flex-col px-10 py-5">
-            <div className="">
-              <label htmlFor="name" className="my-5">
-                Name
-                <input
-                  required
-                  type="text"
-                  placeholder="Product name"
-                  name="name"
-                  id="name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className={`mt-2 p-1 pl-2 w-full border  rounded ${
-                    errorMsg ? "border-red-500" : " border-gray-400"
-                  }`}
-                />
-              </label>
+            <label htmlFor="name" className="my-5">
+              Name
+              <input
+                required
+                type="text"
+                placeholder="Product name"
+                name="name"
+                id="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className={`mt-2 p-1 pl-2 w-full border  rounded ${
+                  errorMsg ? "border-red-500" : " border-gray-400"
+                }`}
+              />
+            </label>
 
-              <label htmlFor="price" className="my-5">
-                Price
-                <input
-                  type="number"
-                  placeholder="Product price"
-                  name="product-price"
-                  id="price"
-                  value={price}
-                  onChange={(e) => setPrice(e.target.value)}
-                  className="mt-2 p-1 pl-2 w-full border border-gray-400  rounded"
-                />
-              </label>
-            </div>
+            <label htmlFor="price" className="my-5">
+              Price
+              <input
+                type="number"
+                placeholder="Product price"
+                name="product-price"
+                id="price"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+                className="mt-2 p-1 pl-2 w-full border border-gray-400  rounded"
+              />
+            </label>
 
             <div className="my-5">
               <label htmlFor="tags">
@@ -197,10 +166,10 @@ const EditModel = ({ data, handleEditPopup }) => {
                 <ul className="flex flex-wrap mt-2">
                   {tags.map((tag) => (
                     <li
-                      key={tag}
+                      key={tag.tagName}
                       className="p-2 m-2 w-max  bg-gray-700 text-white rounded-xl flex items-center"
                     >
-                      {tag}
+                      {tag.tagName}
                       <button
                         type="button w-1"
                         onClick={(e) => handleDeleteTag(e, tag)}
@@ -278,9 +247,9 @@ const EditModel = ({ data, handleEditPopup }) => {
               <button
                 type="button"
                 onClick={handleSubmitBtn}
-                className="m-2 bg-gray-800 p-3 text-white hover:bg-gray-700 rounded"
+                className="m-2 bg-green-700 p-3 text-white hover:bg-green-600 rounded"
               >
-                Submit
+                Edit
               </button>
               <button
                 type="button"

@@ -9,8 +9,5 @@ namespace Digital_Product_Catalogue.DTOs
 
         public string TagName { get; set; } = null!;
 
-        //public virtual Product Product { get; set; } = null!;
-
-        //public virtual Tag Tag { get; set; } = null!;
     }
 }
