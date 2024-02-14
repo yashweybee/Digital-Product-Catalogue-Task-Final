@@ -12,10 +12,7 @@ namespace Digital_Product_Catalogue.DTOs
 
         public decimal? Price { get; set; }
 
-
         public List<IFormFile>? ProductImages { get; set; } = new List<IFormFile>();
-
-        //public List<IFormFile> ProductImages { get; set; } = new List<IFormFile>();
 
         public IFormFile? FeaturedImage { get; set; } = null!;
 

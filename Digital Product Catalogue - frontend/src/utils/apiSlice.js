@@ -10,7 +10,7 @@ const headers = {
 export const apiSlice = createApi({
     reducerPath: "api",
     baseQuery: fetchBaseQuery({ baseUrl: API_URL }),
-    tagTypes: ['products'],
+    tagTypes: ['products', 'wishlist'],
     endpoints: (builder) => ({
         getProducts: builder.query({
             query: () => `/product`,
@@ -27,7 +27,7 @@ export const apiSlice = createApi({
         getWishlistProducts: builder.query({
             query: () => `/WishList/${localStorage.getItem('userId')}`,
             method: 'GET',
-            providesTags: ['products']
+            providesTags: ['wishlist']
         }),
         addProduct: builder.mutation({
             query: (body) => ({
@@ -48,6 +48,15 @@ export const apiSlice = createApi({
                 headers: headers,
                 body: body
             }),
+            invalidatesTags: ['wishlist']
+        }),
+        editProduct: builder.mutation({
+            query: (body) => ({
+                url: `/Product/${body.productId}`,
+                method: 'PUT',
+                // headers: headers,
+                body: body.formData
+            }),
             invalidatesTags: ['products']
         }),
         deleteProduct: builder.mutation({
@@ -55,16 +64,16 @@ export const apiSlice = createApi({
                 url: `/Product/${productId}`,
                 method: 'DELETE',
                 headers: headers,
-                invalidatesTags: ['products']
-            })
+            }),
+            invalidatesTags: ['products']
         }),
         deleteWishlistItem: builder.mutation({
             query: (productId) => ({
                 url: `/WishList/${localStorage.getItem('userId')}/${productId}`,
                 method: 'DELETE',
                 headers: headers,
-                invalidatesTags: ['products']
-            })
+            }),
+            invalidatesTags: ['wishlist']
         }),
     })
 })
@@ -75,6 +84,7 @@ export const {
     useGetWishlistProductsQuery,
     useAddProductMutation,
     useAddWishlistItemMutation,
+    useEditProductMutation,
     useDeleteProductMutation,
     useDeleteWishlistItemMutation
 } = apiSlice;

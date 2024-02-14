@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import useImageFileNameGet from "../../utils/Hooks/useImageFileNameGet";
 import { useDeleteWishlistItemMutation } from "../../utils/apiSlice";
 
-const WishListItem = ({ data, handleOpenModel }) => {
+const WishListItem = ({ data, handleOpenModel, handleDeleteWIshlistItem }) => {
   if (!data) return;
 
   const { product, productImages, productTags } = data;
@@ -75,7 +75,7 @@ const WishListItem = ({ data, handleOpenModel }) => {
           </div>
 
           <button
-            onClick={() => deleteWishlistItem(product.id)}
+            onClick={() => handleDeleteWIshlistItem(product.id)}
             className="text-red-700 mt-3"
           >
             Remove

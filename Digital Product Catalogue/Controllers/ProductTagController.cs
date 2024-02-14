@@ -4,6 +4,7 @@ using Digital_Product_Catalogue.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.IO;
 
 namespace Digital_Product_Catalogue.Controllers
 {
@@ -30,6 +31,19 @@ namespace Digital_Product_Catalogue.Controllers
 
             return Ok(productTags);
         }
+
+        [HttpPost]
+        public async Task<ActionResult> Post([FromBody] WishlistCreateDTO wishlistCreateDTO)
+        {
+            var wishlistItem = _mapper.Map<WishList>(wishlistCreateDTO);
+            _context.Add(wishlistItem);
+            await _context.SaveChangesAsync();
+            //var partyDTO = _mapper.Map<WishlistDTO>(wishlistItem);
+            return Ok("Wishlist Added");
+        }
+
+
+
 
     }
 }

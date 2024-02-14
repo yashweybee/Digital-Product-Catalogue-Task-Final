@@ -7,15 +7,14 @@ import { useGetWishlistProductsQuery } from "../../utils/apiSlice";
 
 const Header = () => {
   const [showPopup, setShowPopup] = useState(false);
-  const { data: products } = useGetWishlistProductsQuery();
-  const [numbersOfWishlistItems, setNumbersOfWishlistItems] = useState(0);
-
+  const { data: wishlistProducts } = useGetWishlistProductsQuery();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!products) return;
-    setNumbersOfWishlistItems(products.length);
-  }, [products]);
+  // useEffect(() => {
+  //   if (!products) return;
+  //   console.log(products);
+  //   setNumbersOfWishlistItems(products.length);
+  // }, [products, refetchWishlistData]);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -162,11 +161,6 @@ const Header = () => {
         <nav className="bg-white border-gray-200 px-4 lg:px-6 py-2.5 ">
           <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
             <Link to="/products" className="flex items-center">
-              {/* <img
-                src="https://flowbite.com/docs/images/logo.svg"
-                className="mr-3 h-6 sm:h-9"
-                alt="Flowbite Logo"
-              /> */}
               <span className="self-center text-xl font-semibold whitespace-nowrap ">
                 {/* <h1 className="text-3xl">Shopping.com</h1> */}
                 Trendsetter
@@ -284,7 +278,7 @@ const Header = () => {
                     className="block py-2 pr-4 pl-3 text-gray-800 rounded bg-primary-700 lg:bg-transparent lg:text-primary-700 lg:p-0 "
                     aria-current="page"
                   >
-                    Wishlist({numbersOfWishlistItems})
+                    Wishlist({wishlistProducts?.length})
                   </Link>
                 </li>
               </ul>

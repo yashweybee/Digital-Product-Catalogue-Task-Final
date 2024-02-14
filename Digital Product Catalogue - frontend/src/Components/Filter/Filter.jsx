@@ -5,20 +5,18 @@ import {
 } from "../../utils/apiSlice";
 import { useDispatch } from "react-redux";
 import { setFilterTags } from "../../utils/filterSlice";
-// import MultirangeSlider from "../MultirangeSlider/MultirangeSlider";
-
-import MultiRangeSlider from "multi-range-slider-react";
 import MultirangeSlider from "../MultirangeSlider/MultirangeSlider";
 import { setPriceRangeValues } from "../../utils/stateSlice";
 
 const Filter = () => {
   const { data: productTags } = useGetProductTagsQuery();
-  const { data: products } = useGetProductsQuery();
+  const { data: products, isSuccess } = useGetProductsQuery();
   const dispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
   const [filteringTags, setFilteringTags] = useState([]);
-  const [priceRangeMaxValue, setpriceRangeMaxValue] = useState();
   if (!productTags || !products) return;
+
+  const maxPrice = Math.max(...products.map((product) => product.price));
 
   const handleCheckBox = (e) => {
     const tempTags = filteringTags;
@@ -29,12 +27,10 @@ const Filter = () => {
       }
       setFilteringTags(tempTags);
     } else {
-      // const tempTags = filteringTags;
       tempTags.push(e.target.id);
       setFilteringTags(tempTags);
     }
     dispatch(setFilterTags(filteringTags));
-    // console.log(filteringTags);
   };
 
   const handleToggle = () => {
@@ -43,13 +39,8 @@ const Filter = () => {
 
   const handlePriceRangeValues = ({ min, max }) => {
     dispatch(setPriceRangeValues({ min, max }));
-    // clearTimeout(debouncingTimeout);
-    // debouncingTimeout = setTimeout(() => {
-    //   // Set your state here
-    //   // console.log({ min, max });
-    // }, 5000); // Adjust the delay as needed
   };
-  // let debouncingTimeout;
+
   return (
     <div className="w-full mt-5 pr-2 lg:w-2/12 lg:block ">
       <div className="p-4 mb-5 bg-white border border-gray-200 text-black rounded">
@@ -102,7 +93,7 @@ const Filter = () => {
 
         <MultirangeSlider
           min={0}
-          max={priceRangeMaxValue || 1000}
+          max={maxPrice}
           onChange={({ min, max }) =>
             handlePriceRangeValues({ min: min, max: max })
           }

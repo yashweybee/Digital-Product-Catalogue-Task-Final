@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import {
   useAddProductMutation,
+  useDeleteProductMutation,
+  useEditProductMutation,
   useGetProductTagsQuery,
 } from "../../utils/apiSlice";
 import Autocomplete from "../Autocomplete/Autocomplete";
@@ -10,7 +12,9 @@ import { useNavigate } from "react-router";
 import useImageFileNameGet from "../../utils/Hooks/useImageFileNameGet";
 
 const EditModel = ({ data, handleEditPopup }) => {
-  const [addProduct] = useAddProductMutation();
+  // const [addProduct] = useAddProductMutation();
+  // const [deleteProduct] = useDeleteProductMutation();
+  const [editProduct] = useEditProductMutation();
   const { data: productTags } = useGetProductTagsQuery();
 
   const editProductData = useSelector((store) => store?.state?.productEditData);
@@ -112,15 +116,9 @@ const EditModel = ({ data, handleEditPopup }) => {
 
   const handleDeleteTag = (e, tagName) => {
     e.preventDefault();
-    const temptags = tags;
 
-    const index = temptags.indexOf(tagName);
-    if (index > -1) {
-      // only splice array when item is found
-      temptags.splice(index, 1);
-    }
-    // console.log(temptags.length);
-    setTags(temptags);
+    const updatedTags = tags.filter((tag) => tag !== tagName);
+    setTags(updatedTags);
   };
 
   const handleSubmitBtn = async (e) => {
@@ -132,24 +130,19 @@ const EditModel = ({ data, handleEditPopup }) => {
     }
 
     const formData = new FormData();
+    formData.append("Id", data.id);
     formData.append("Name", name);
     formData.append("Description", desc);
     formData.append("Price", price);
 
-    for (let i = 0; i < imageFiles.length; i++) {
-      formData.append("ProductImages", imageFiles[i]);
-    }
+    const editData = {
+      productId: data.id,
+      formData: formData,
+    };
 
-    formData.append("FeaturedImage", featuredImageFile);
-    formData.append("ProductTags", [...tags]);
+    // console.log(formData.get("Price"));
 
-    console.log(formData.get("FeaturedImage"));
-
-    // await addProduct(formData);
-  };
-
-  const handleCloseToast = () => {
-    setIsToastOpen(false);
+    await editProduct(editData);
   };
 
   return (

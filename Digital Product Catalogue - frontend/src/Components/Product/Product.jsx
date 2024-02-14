@@ -58,7 +58,7 @@ const Product = ({
     }
   }, []);
 
-  const handleWishlistBtn = () => {
+  const handleWishlistBtn = async () => {
     if (!localStorage.getItem("token")) {
       console.log("userNot Exist");
       setShowGoToLoginPopup(!showGoToLoginPopup);
@@ -67,8 +67,8 @@ const Product = ({
 
     const wishlistProductsIds = wishlistData.map((pro) => pro.product.id);
     if (wishlistProductsIds.includes(data.id)) {
-      console.log(data.id);
-      deleteWishlistItem(data.id);
+      // console.log(data.id);
+      await deleteWishlistItem(data.id);
     } else {
       handleAddtoWishlist(data.id);
     }
@@ -216,14 +216,15 @@ const Product = ({
         <EditModel data={data} handleEditPopup={productEditBtn} />
       )}
 
-      <div className="relative m-2 mx-1  flex w-full max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-xl cursor-pointer transition-all">
+      <div className="relative m-2 mx-1 flex w-full h-[25rem] max-w-xs flex-col overflow-hidden rounded-xl border border-gray-100 bg-white shadow-[0_3px_10px_rgb(0,0,0,0.1)] cursor-pointer transition-all  ">
         <div
           onClick={() => handleOpenModel(data.id)}
-          className="relative mx-3 mt-3 h-60 overflow-hidden rounded bg-gray-200"
+          className="relative mx-3 mt-3 h-60 overflow-hidden rounded-lg bg-gray-200"
           href="#"
         >
           <img
-            className="object-cover h-full w-full hover:scale-110 transition-all"
+            // className="object-cover h-full w-full hover:scale-110 transition-all"
+            className="object-cover h-60 w-full hover:scale-110 transition-all"
             src={"../../../Public/Uploads/" + imgFileName}
             alt="product image"
           />
@@ -237,7 +238,7 @@ const Product = ({
               {data.name}
             </h5>
           </div>
-          <div className="mt-2 mb-5 flex flex-col  justify-between">
+          <div className="mt-5 flex  justify-between">
             <p>
               <span className="text-3xl font-bold text-slate-900">
                 ${data.price}
@@ -294,40 +295,16 @@ const Product = ({
                 5.0
               </span>
             </div> */}
-          </div>
 
-          {!isAdmin && (
-            <div
-              onClick={handleWishlistBtn}
-              className=" flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300"
-            >
-              {/* <svg
-                width="24px"
-                height="24px"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
+            {!isAdmin && (
+              <div
+                onClick={handleWishlistBtn}
+                className=" flex items-center justify-center rounded-md  text-center text-sm font-medium text-white focus:outline-none focus:ring-4"
               >
-                <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
-                <g
-                  id="SVGRepo_tracerCarrier"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                ></g>
-                <g id="SVGRepo_iconCarrier">
-                  <path
-                    d="M15.7 4C18.87 4 21 6.98 21 9.76C21 15.39 12.16 20 12 20C11.84 20 3 15.39 3 9.76C3 6.98 5.13 4 8.3 4C10.12 4 11.31 4.91 12 5.71C12.69 4.91 13.88 4 15.7 4Z"
-                    stroke="#ffffff"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  ></path>
-                </g>
-              </svg> */}
-              {isInWishlist ? <HeartSvgFilled /> : <HeartSvg />}
-              Add to wishlist
-            </div>
-          )}
+                {isInWishlist ? <HeartSvgFilled /> : <HeartSvg />}
+              </div>
+            )}
+          </div>
           {isAdmin && (
             <div className="flex justify-between mt-5">
               <button

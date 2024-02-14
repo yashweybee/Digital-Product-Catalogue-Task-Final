@@ -32,7 +32,7 @@ const ProductModel = ({ data, handleCloseModel, handleAddtoWishlist }) => {
   };
 
   return (
-    <div className="modal opacity-1 fixed w-full h-full top-0 left-0 flex items-center justify-center">
+    <div className="modal opacity-1 fixed w-full h-full top-0 left-0 flex items-center justify-center z-50">
       <div className="modal-overlay absolute w-full h-full bg-gray-900 opacity-50"></div>
       <section className="relative py-12 w-10/12 sm:py-16 bg-white z-50 rounded">
         <div
@@ -74,7 +74,7 @@ const ProductModel = ({ data, handleCloseModel, handleAddtoWishlist }) => {
                             key={img}
                             src={"../../../Public/Uploads/" + img}
                             alt="featured image"
-                            className="h-[150px] w-[150px]   rounded mb-2"
+                            className="h-[150px] w-[150px] mb-2 rounded-sm"
                           />
                         </div>
                       ))}

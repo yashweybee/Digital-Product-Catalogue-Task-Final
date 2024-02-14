@@ -12,6 +12,8 @@ namespace Digital_Product_Catalogue.Helpers
             CreateMap<Product, ProductDTO>().ReverseMap();
             CreateMap<ProductCreateDTO, Product>();
 
+            CreateMap<ProductEditDTO, Product>();
+
 
             CreateMap<ProductImage, ProductImageDTO>().ReverseMap();
             CreateMap<ProductImageCreateDTO, ProductImage>();

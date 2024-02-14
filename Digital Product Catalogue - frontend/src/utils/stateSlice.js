@@ -5,7 +5,8 @@ const stateSlice = createSlice({
     initialState: {
         showWishlistModel: false,
         priceRangeValues: {},
-        productEditData: []
+        productEditData: [],
+        wishlistProductsCount: 0
     },
     reducers: {
         setShowWishlistModel: (state, action) => {
@@ -17,10 +18,13 @@ const stateSlice = createSlice({
         setPriceRangeValues: (state, action) => {
             // console.log(action.payload);
             state.priceRangeValues = action.payload
+        },
+        setWishlistProductsCount: (state, action) => {
+            state.wishlistProductsCount = action.payload
         }
     }
 })
 
 
-export const { setShowWishlistModel, setProductEditData, setPriceRangeValues } = stateSlice.actions
+export const { setShowWishlistModel, setWishlistProductsCount, setProductEditData, setPriceRangeValues } = stateSlice.actions
 export default stateSlice.reducer //stateReducer

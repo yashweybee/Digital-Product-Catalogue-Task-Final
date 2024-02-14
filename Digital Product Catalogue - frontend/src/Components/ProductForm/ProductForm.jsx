@@ -75,29 +75,8 @@ const ProductForm = () => {
 
   const handleDeleteTag = (e, tagName) => {
     e.preventDefault();
-    // const temptags = tags;
-
-    // const index = temptags.indexOf(tagName);
-    // if (index > -1) {
-    //   // only splice array when item is found
-    //   temptags.splice(index, 1);
-    // }
-    // console.log(temptags);
-
     const updatedTags = tags.filter((tag) => tag !== tagName);
     setTags(updatedTags);
-  };
-
-  const setDataonStateChange = () => {
-    setName("");
-    setDesc("");
-    setPrice("");
-    setTags([]);
-    setTagText("");
-    setImageFiles([]);
-    setFeaturedImageFile([]);
-    setTempFeaturedFile("https://placehold.co/600x400?text=Featured+Image");
-    setTempImagesFile([]);
   };
 
   const handleSubmitBtn = async (e) => {
@@ -120,10 +99,6 @@ const ProductForm = () => {
     // formData.append("ProductImages", imageFiles);
     formData.append("FeaturedImage", featuredImageFile);
     formData.append("ProductTags", [...tags]);
-
-    // console.log(desc);
-
-    // console.log(formData.get("ProductTags"));
 
     await addProduct(formData);
     setIsToastOpen(true);

@@ -163,56 +163,42 @@ namespace Digital_Product_Catalogue.Controllers
         }
 
 
-
-        [HttpPost("edit")]
-        public async Task<ActionResult> Edit([FromForm] ProductEditDTO productEditDTO)
+        [HttpPut("{Id}")]
+        public async Task<ActionResult> Put(int Id, [FromForm] ProductEditDTO productEditDTO)
         {
 
-            var product = new Product
+            if (productEditDTO == null)
             {
-                Name = productEditDTO.Name,
-                Description = productEditDTO.Description,
-                Price = (Decimal)productEditDTO.Price,
-            };
-
-            var productToAdd = _mapper.Map<Product>(product);
-            _context.Products.Add(productToAdd);
-            await _context.SaveChangesAsync();
-
-            Product? lastEnteredProduct = await _context.Products.OrderByDescending(x => x.Id).FirstOrDefaultAsync();
-
-
-
-            //Other Images
-
-
-
-
-            //Featured Image
-            IFormFile featuredImg = (IFormFile)GetFile(productEditDTO.FeaturedImage);
-
-
-
-
-            //Product-Tags
-            //string[] productTags = productCreateDTO.ProductTags;
-            string[] productTags = productEditDTO.ProductTags.Split(',');
-
-
-            foreach (string tag in productTags)
-            {
-                var tagItem = new ProductTag
-                {
-                    ProductId = lastEnteredProduct.Id,
-                    TagName = tag
-                };
-
-                _context.ProductTags.Add(tagItem);
+                return BadRequest("Invalid product data.");
             }
 
-            await _context.SaveChangesAsync();
 
-            return Ok("Product Added");
+            var existingProduct = await _context.Products.FindAsync(Id);
+
+
+            if (existingProduct == null)
+            {
+                return NotFound("Product not found.");
+            }
+
+            existingProduct.Name = productEditDTO.Name;
+            existingProduct.Description = productEditDTO.Description;
+            existingProduct.Price = (decimal)productEditDTO.Price;
+
+            try
+            {
+
+                await _context.SaveChangesAsync();
+                return NoContent();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return StatusCode(500, "Concurrency error occurred.");
+            }
+            catch (DbUpdateException)
+            {
+                return StatusCode(500, "Error updating the product.");
+            }
         }
 
         [HttpGet("{fileName}")]
@@ -270,7 +256,6 @@ namespace Digital_Product_Catalogue.Controllers
             //}
 
             return Ok(filePath);
-
         }
 
 
@@ -298,10 +283,6 @@ namespace Digital_Product_Catalogue.Controllers
             await _context.SaveChangesAsync();
             return NoContent();
 
-
-
-
-
             //var productTagsData = _context.ProductTags.Where(tag => tag.ProductId == Id);
             //var productImagesToDelete = _context.ProductImages.Where(pi => pi.ProductId == Id);
             //_context.ProductImages.RemoveRange(productImagesToDelete);
@@ -311,5 +292,38 @@ namespace Digital_Product_Catalogue.Controllers
             //return NoContent();
         }
 
+
+        //[HttpDelete("{Id}", Name = "EditDelete")]
+        //public async Task<ActionResult> EditDelete(int Id)
+        //{
+
+        //    var product = await _context.Products.FindAsync(Id);
+
+        //    if (product == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var wishListEntriesToDelete = _context.WishLists.Where(wl => wl.ProductId == Id);
+        //    _context.WishLists.RemoveRange(wishListEntriesToDelete);
+
+        //    var productTagsData = _context.ProductTags.Where(tag => tag.ProductId == Id);
+        //    var productImagesToDelete = _context.ProductImages.Where(pi => pi.ProductId == Id);
+
+        //    _context.ProductImages.RemoveRange(productImagesToDelete);
+        //    _context.ProductTags.RemoveRange(productTagsData);
+        //    _context.Products.Remove(product);
+
+        //    await _context.SaveChangesAsync();
+        //    return NoContent();
+
+        //    //var productTagsData = _context.ProductTags.Where(tag => tag.ProductId == Id);
+        //    //var productImagesToDelete = _context.ProductImages.Where(pi => pi.ProductId == Id);
+        //    //_context.ProductImages.RemoveRange(productImagesToDelete);
+        //    //_context.ProductTags.RemoveRange(productTagsData);
+        //    //_context.Products.Remove(product);
+        //    //await _context.SaveChangesAsync();
+        //    //return NoContent();
+        //}
     }
 }

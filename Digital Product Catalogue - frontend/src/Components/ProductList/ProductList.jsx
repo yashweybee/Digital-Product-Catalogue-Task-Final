@@ -78,9 +78,8 @@ const ProductList = () => {
     if (data.length === 0) return;
 
     const tempData = [...data];
-
     if (sortingType === "Latest") {
-      setProductsData(tempData);
+      setProductsData(tempData.reverse());
     } else if (sortingType === "Price") {
       const sortedProducts = tempData.sort((a, b) => a.price - b.price);
       console.log(sortedProducts);

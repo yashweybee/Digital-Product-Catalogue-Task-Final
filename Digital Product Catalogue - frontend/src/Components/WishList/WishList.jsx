@@ -27,7 +27,6 @@ const WishList = () => {
       await deleteWishlistItem(productId);
 
       const tempData = productsData.filter((p) => p.product.id !== productId);
-
       setProductsData(tempData);
     } catch (error) {
       console.error("Error deleting wishlist item:", error);
@@ -73,6 +72,7 @@ const WishList = () => {
         {productsData.map((product) => (
           <WishListItem
             handleOpenModel={handleOpenModel}
+            handleDeleteWIshlistItem={handleDeleteWIshlistItem}
             data={product}
             key={product.product.id}
           />
