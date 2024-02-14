@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import {
+  useAddFeaturedImageMutation,
   useAddTagMutation,
+  useDeleteImageMutation,
   useDeleteTagMutation,
   useEditProductMutation,
   useGetProductTagsQuery,
 } from "../../utils/apiSlice";
 import Autocomplete from "../Autocomplete/Autocomplete";
-import { CrossSvgTags } from "../../utils/svgs";
+import { CrossSearchSvg, CrossSvgTags } from "../../utils/svgs";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import useImageFileNameGet from "../../utils/Hooks/useImageFileNameGet";
@@ -14,6 +16,9 @@ import useImageFileNameGet from "../../utils/Hooks/useImageFileNameGet";
 const EditModel = ({ data, handleEditPopup }) => {
   const [deleteTag] = useDeleteTagMutation();
   const [addTag] = useAddTagMutation();
+
+  const [deleteImage] = useDeleteImageMutation();
+  const [addFeaturedImage] = useAddFeaturedImageMutation();
 
   const [editProduct] = useEditProductMutation();
   const { data: productTags } = useGetProductTagsQuery();
@@ -24,7 +29,6 @@ const EditModel = ({ data, handleEditPopup }) => {
   const [tags, setTags] = useState([]);
   const [tagText, setTagText] = useState("");
   const [imageFiles, setImageFiles] = useState([]);
-  const [featuredImageFile, setFeaturedImageFile] = useState([]);
   const [tempFeaturedFile, setTempFeaturedFile] = useState(
     "https://placehold.co/600x400?text=Featured+Image"
   );
@@ -44,7 +48,7 @@ const EditModel = ({ data, handleEditPopup }) => {
       return `../../../Public/Uploads/${img}`;
     });
     setTempImagesFile(otherImgsTemp);
-    setFeaturedImageFile(imgObj.featuredImgName);
+
     setImageFiles(imgObj.otherImageName);
   };
 
@@ -71,18 +75,34 @@ const EditModel = ({ data, handleEditPopup }) => {
   const handleImages = async (e) => {
     const allFiles = Array.from(e.target.files);
     const tempFiles = allFiles.map((f) => URL.createObjectURL(f));
-    // console.log(allFiles);
+
     setTempImagesFile(tempFiles);
     setImageFiles(e.target.files);
   };
 
+  const handleDeleteImage = (file) => {
+    const imgPathArray = file.split("/");
+    const imgName = imgPathArray[imgPathArray.length - 1];
+    const [{ id }] = data.images.filter((img) => img.path.includes(imgName));
+    deleteImage(id);
+  };
+
   const handleFeaturedImage = async (e) => {
+    // delete featureed Image
+    const imgPathArray = tempFeaturedFile.split("/");
+    const imgName = imgPathArray[imgPathArray.length - 1];
+    const [{ id }] = data.images.filter((img) => img.path.includes(imgName));
+
+    await deleteImage(id);
+
     const myFile = e.target.files[0];
     const tempFile = URL.createObjectURL(myFile);
     setTempFeaturedFile(tempFile);
+    const formData = new FormData();
+    formData.append("ProductId", data.id);
+    formData.append("FeaturedImg", myFile);
 
-    // console.log(myFile);
-    setFeaturedImageFile(myFile);
+    await addFeaturedImage(formData);
   };
 
   const handleDeleteTag = (e, tagData) => {
@@ -182,10 +202,10 @@ const EditModel = ({ data, handleEditPopup }) => {
               </label>
             </div>
 
-            <div className="flex items-center gap-10">
+            <div className="flex items-start gap-10">
               {/* feaurted image section */}
-              <div className="flex gap-10 ">
-                <label htmlFor="featureImage" className="my-5">
+              <div className="flex gap-20 ">
+                <label htmlFor="featureImage" className="">
                   Featured Image
                   <input
                     type="file"
@@ -220,12 +240,20 @@ const EditModel = ({ data, handleEditPopup }) => {
                 </label>
                 <div className="w-full mt-2 flex flex-wrap  border border-gray-300  rounded">
                   {tempImagesFiles.map((file) => (
-                    <img
-                      key={file}
-                      src={file}
-                      alt="featured product image"
-                      className="w-[5em] m-2 object-cover rounded"
-                    />
+                    <div key={file} className="flex ">
+                      <img
+                        src={file}
+                        alt="featured product image"
+                        className="w-[10em] m-2 object-cover rounded"
+                      />
+                      <button
+                        onClick={() => handleDeleteImage(file)}
+                        type="button"
+                        className="absolute bg-white"
+                      >
+                        <CrossSearchSvg />
+                      </button>
+                    </div>
                   ))}
                 </div>
               </div>

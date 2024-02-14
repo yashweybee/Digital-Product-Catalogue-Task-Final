@@ -59,6 +59,15 @@ export const apiSlice = createApi({
             }),
             invalidatesTags: ['wishlist']
         }),
+        addFeaturedImage: builder.mutation({
+            query: (body) => ({
+                url: '/ProductImage/FeaturedImage',
+                method: 'POST',
+                // headers: headers,
+                body: body
+            }),
+            invalidatesTags: ['wishlist']
+        }),
         editProduct: builder.mutation({
             query: (body) => ({
                 url: `/Product/${body.productId}`,
@@ -84,7 +93,14 @@ export const apiSlice = createApi({
             }),
             invalidatesTags: ['wishlist']
         }),
-
+        deleteImage: builder.mutation({
+            query: (imgId) => ({
+                url: `/ProductImage/${imgId}`,
+                method: 'DELETE',
+                // headers: headers,
+            }),
+            invalidatesTags: ['products']
+        }),
         deleteTag: builder.mutation({
             query: (tagId) => ({
                 url: `/ProductTag/${tagId}`,
@@ -103,8 +119,10 @@ export const {
     useAddProductMutation,
     useAddWishlistItemMutation,
     useAddTagMutation,
+    useAddFeaturedImageMutation,
     useEditProductMutation,
     useDeleteProductMutation,
     useDeleteWishlistItemMutation,
+    useDeleteImageMutation,
     useDeleteTagMutation
 } = apiSlice;

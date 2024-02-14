@@ -68,14 +68,10 @@ namespace Digital_Product_Catalogue.Controllers
             {
                 return NotFound();
             }
-            _context.Remove(productTag);
+            _context.ProductTags.Remove(productTag);
             await _context.SaveChangesAsync();
             return NoContent();
         }
-
-
-
-
 
     }
 }

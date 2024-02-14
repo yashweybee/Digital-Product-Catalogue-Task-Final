@@ -20,26 +20,25 @@ namespace Digital_Product_Catalogue.Controllers
         }
 
 
-        //[HttpPost]
-        //public async Task<ActionResult> Post([FromForm] IFormFile imgFile)
-        //{
+        [HttpPost("FeaturedImage")]
+        public async Task<ActionResult> PostFeaturedImg([FromForm] ProductFeaturedImageCreateDTO productFeaturedImageCreateDTO)
+        {
 
-        //    var filePath = (ObjectResult)await handleImages(imgFile);
-        //    string fp = filePath.Value.ToString();
+            var filePath = (ObjectResult)await handleImages(productFeaturedImageCreateDTO.FeaturedImg);
+            string fp = filePath.Value.ToString();
 
 
-        //    var productFeaturedImg = new ProductImage
-        //    {
-        //        IsFeatured = true,
-        //        ProductId = lastEnteredProduct.Id,
-        //        Path = fp
-        //    };
+            var productFeaturedImg = new ProductImage
+            {
+                IsFeatured = true,
+                ProductId = productFeaturedImageCreateDTO.ProductId,
+                Path = fp
+            };
 
-        //    _context.ProductImages.Add(productFeaturedImg);
-        //    await _context.SaveChangesAsync();
-
-        //    return Ok();    
-        //}
+            _context.ProductImages.Add(productFeaturedImg);
+            await _context.SaveChangesAsync();
+            return Ok();
+        }
 
 
         [HttpGet("image")]
@@ -75,12 +74,20 @@ namespace Digital_Product_Catalogue.Controllers
                 await imgFile.CopyToAsync(fileStream);
             }
 
-            //using (var stream = System.IO.File.Create(filePath))
-            //{
-            //    await imgFile.CopyToAsync(stream);
-            //}
-
             return Ok(filePath);
+        }
+
+        [HttpDelete("{Id}")]
+        public async Task<ActionResult> DeleteImage(int Id)
+        {
+            var productImg = await _context.ProductImages.FindAsync(Id);
+            if (productImg == null)
+            {
+                return NotFound();
+            }
+            _context.ProductImages.Remove(productImg);
+            await _context.SaveChangesAsync();
+            return NoContent();
         }
 
 
