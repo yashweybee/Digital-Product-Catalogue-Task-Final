@@ -29,6 +29,14 @@ export const apiSlice = createApi({
             method: 'GET',
             providesTags: ['wishlist']
         }),
+
+        generatePDF: builder.mutation({
+            query: () => `/PDF/${localStorage.getItem("userId")}`,
+            method: 'POST',
+            invalidatesTags: ['products']
+        }),
+
+
         addProduct: builder.mutation({
             query: (body) => ({
                 url: '/Product',
@@ -125,6 +133,10 @@ export const {
     useGetProductsQuery,
     useGetProductTagsQuery,
     useGetWishlistProductsQuery,
+
+
+    useGeneratePDFMutation,
+
     useAddProductMutation,
     useAddWishlistItemMutation,
     useAddTagMutation,

@@ -164,7 +164,7 @@ const ProductModel = ({ data, handleCloseModel, handleAddtoWishlist }) => {
                 </div>
                 {!isAdmin && (
                   <button
-                    onClick={handleWishlistBtn}
+                    // onClick={handleWishlistBtn}
                     type="button"
                     className="inline-flex items-center justify-center rounded-md border-2 border-transparent bg-gray-900 bg-none px-12 py-3 text-center text-base font-bold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-gray-800"
                   >

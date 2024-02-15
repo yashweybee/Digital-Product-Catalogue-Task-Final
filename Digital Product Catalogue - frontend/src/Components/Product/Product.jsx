@@ -243,7 +243,9 @@ const Product = ({
               <span className="text-3xl font-bold text-slate-900">
                 ${data.price}
               </span>
-              <span className="text-sm text-slate-900 line-through">$699</span>
+              <span className="text-sm ml-2 text-slate-900 line-through">
+                ${Math.floor(data.price - (data.price * 40) / 100)}
+              </span>
             </p>
             {/* <div className="flex items-center">
               <svg

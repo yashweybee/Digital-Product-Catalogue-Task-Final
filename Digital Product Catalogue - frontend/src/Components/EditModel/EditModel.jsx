@@ -195,7 +195,7 @@ const EditModel = ({ data, handleEditPopup }) => {
                 id="price"
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
-                className="mt-2 p-1 pl-2 w-full border border-gray-400  rounded"
+                className="mt-2 p-1 pl-2 w-full border border-gray-400 rounded"
               />
             </label>
 
