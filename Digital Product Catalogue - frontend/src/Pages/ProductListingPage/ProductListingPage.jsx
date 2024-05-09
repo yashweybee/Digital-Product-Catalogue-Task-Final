@@ -23,6 +23,17 @@ const ProductListingPage = () => {
     <div>
       <Header />
       <section className="">
+        {localStorage.getItem("userName") === "Admin" && (
+          <button
+            onClick={() => {
+              navigate("/admin");
+            }}
+            type="button"
+            className="p-3 rounded border bg-gray-800 text-white hover:bg-gray-700 ml-8"
+          >
+            Add Product
+          </button>
+        )}
         <div className="mt-5">
           <div className="flex flex-wrap mb-24 ">
             {!isAdmin && <Filter />}

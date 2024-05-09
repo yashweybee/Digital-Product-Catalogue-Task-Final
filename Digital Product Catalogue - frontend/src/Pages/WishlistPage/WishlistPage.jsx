@@ -1,13 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ProductList from "../../Components/ProductList/ProductList";
 import WishList from "../../Components/WishList/WishList";
 import Header from "../../Components/Header/Header";
 import Footer from "../../Components/Footer/Footer";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useGeneratePDFMutation } from "../../utils/apiSlice";
 
 const WishlistPage = () => {
   const [generatePDF] = useGeneratePDFMutation();
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!localStorage.getItem("userName")) {
+      navigate("/login");
+    }
+  }, []);
 
   const handleDownloadPDF = async () => {
     try {

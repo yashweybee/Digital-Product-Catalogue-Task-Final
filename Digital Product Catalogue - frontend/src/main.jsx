@@ -22,22 +22,18 @@ const appRouter = createBrowserRouter([
       },
       {
         path: "/admin",
-        // element: <>{token ? <ProductAddPage /> : <>Please login</>}</>,
         element: <ProductAddPage />,
       },
       {
         path: "/admin/products",
-        // element: <>{token ? <AdminProductListingPage /> : <>Please login</>}</>,
         element: <AdminProductListingPage />,
       },
       {
         path: "/products",
-        // element: <>{token ? <ProductListingPage /> : <>Please login</>}</>,
         element: <ProductListingPage />,
       },
       {
         path: "/wishlist",
-        // element: <>{token ? <WishlistPage /> : <>Please login</>}</>,
         element: <WishlistPage />,
       },
     ],
